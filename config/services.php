@@ -32,7 +32,7 @@ return [
     'google' => [
         'client_id' => '695294047734-ho44dgerll8b93ng8lh358npi569i4rm.apps.googleusercontent.com',
         'client_secret' => '4pCWq-1ZGsCr7rskMLLqDkDN',
-        'redirect' => 'http://store.bukitbiak.com/auth/google/callback/',
+        'redirect' => 'http://online-store.com/auth/google/callback/',
      
     ],
 

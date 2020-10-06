@@ -171,6 +171,14 @@ class IndexController extends Controller
         
         return view('frontend.getCart',compact('data'));
     }
+
+    public function countCart(Request $request)
+    {
+        $data['cart'] = Cart::where('user_id',Auth::user()['id'])
+                        ->where('status',0)->count();
+
+       return view('frontend.count-cart',compact('data'));
+    }
     public function delete(Request $request)
     {
        $data =  Cart::where('id',$request->id)->delete();

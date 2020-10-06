@@ -6,6 +6,9 @@ use Illuminate\Support\ServiceProvider;
 use Http;
 use Illuminate\Support\Facades\View;
 use Carbon\Carbon;
+use App\Models\Cart;
+use Auth;
+use Illuminate\Http\Request;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,10 +27,15 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Request $request)
     {
         config(['app.locale' => 'id']);
 	    Carbon::setLocale('id');
-	    date_default_timezone_set('Asia/Jakarta');
+        date_default_timezone_set('Asia/Jakarta');
+   
+        View::share([
+            'count_keranjang'   => Cart::where('status',0)->where('user_id',Auth::user()['id'])
+                                ->count(),
+        ]);
     }
 }

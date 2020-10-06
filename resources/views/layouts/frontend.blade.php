@@ -87,6 +87,24 @@
                 color: white;
                 font-size: 22px;
             }
+			.badge-notif {
+        		position:relative;
+			}
+
+			.badge-notif[data-badge]:after {
+					content:attr(data-badge);
+					position:absolute;
+					top:19px;
+					right:-6px;
+					font-size:.7em;
+					background:#e53935;
+					color:white;
+					width:26px;
+					height:26px;
+					text-align:center;
+					line-height:26px;
+					border-radius: 50%;
+			}
         
            
 
@@ -254,11 +272,13 @@
 				</div>
 			</footer>
 			
+
 			<div class="cart-wr">
-                <button class="buttonCart" id="buttoncart" data-toggle="modal" data-target="#cartmodal">
-                    <i class="las la-shopping-cart" ></i>
-                </button>
+				
+			
 			</div>
+
+		
 			
 
 			<!-- modal -->
@@ -371,9 +391,23 @@
 		<script src="{{ asset('js/jquery-loading-master/dist/jquery.loading.js') }}"></script>
         <script>
 			$(document).ready(function() {
+				
+				$.ajax({
+					url: "{{ route('cart.count') }}",
+					type: "get",
+					success: function(response){
+					
+						$('.cart-wr').html(response);
+					},
+				});
+				
+			
+			})
+
+			$(document).ready(function() {
 				var dataharga = [];
 
-				$("#buttoncart").click(function()
+				$(document).on('click','#buttoncart',function()
 				{
 					// loadkeranjang();
 					show();
@@ -381,14 +415,13 @@
 			})
 
 			function show(params) {
-				$.ajax({
-						
-						url: "{{ route('cart.check') }}",
-						type: "get",
-						success: function(response){
-							$('.list-cart').html(response);
-						},
-					});
+				$.ajax({	
+					url: "{{ route('cart.check') }}",
+					type: "get",
+					success: function(response){
+						$('.list-cart').html(response);
+					},
+				});
 			}
 
 			$(document).on('click','.delete-cart',function(){
