@@ -7,6 +7,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 
+<style>
+
+</style>
 @endsection
 @section('content')
 <div class="content-msp">
@@ -40,6 +43,7 @@
                         <h5 class="card-header">Alamat Saya</h5>
                         <div class="card-body">
                            <p class="card-text float-right ml-2 editbtn" style="text-decoration:underline;" data-toggle="modal" data-target="#modalubah"
+                               data-nama ="{{  $data['alamat'] != null ? $data['alamat']->nama : ''  }}" data-no_telp ="{{  $data['alamat'] != null ? $data['alamat']->no_telp : ''  }}"
                            data-provinsi_id ="{{  $data['alamat'] != null ? $data['alamat']->provinsi_id : ''  }}"  data-kota_id ="{{  $data['alamat'] != null ? $data['alamat']->kota_id : ''  }}"  data-kecamatan_id ="{{  $data['alamat'] != null ? $data['alamat']->kecamatan_id : ''  }}"  data-desa_id ="{{  $data['alamat'] != null ? $data['alamat']->desa_id : ''  }}">Ubah </p>
                           
                            <p class="card-text">Nama Toko : {{  $data['alamat'] != null ? $data['alamat']->nama : ''  }}</p>
@@ -86,9 +90,12 @@
                                 
                                
                                 <div class="col-lg-12">
-                                    <h6 class="mt-5">Diterbitkan Atas Nama :</h6>
+                                    <h6 class="mt-5">Diterbitkan Atas Nama :
+                                    </h6>
                                     
-                                    <p>{{ $data['alamat']->nama }}</p>
+                                    
+                                    <p>{{ $data['alamat'] != null ? $data['alamat']->nama : '-'  }}
+                                    </p>
                                     <h6>Alamat Pengiriman : </h6>
                                     <p>
                                         @if($data['alamat'] != null) 
@@ -96,7 +103,8 @@
                                         <?php echo ucwords(strtolower($data['alamat']->Kota->kota)) ?> ,
                                         <?php echo ucwords(strtolower($data['alamat']->Kecamatan->kecamatan)) ?> ,
                                         <?php echo ucwords(strtolower($data['alamat']->Desa->desa)) ?>
-                                
+                                        @else
+                                        -
                                         @endif 
                                     </p>
                                 </div>
@@ -189,6 +197,16 @@
                 
                 <div class="modal-body">
                     <input type="hidden" name="user_id" value="{{ Auth::user()['id'] }}">
+                    
+                    <label for="name" >Nama Penerima</label>
+                    <div class="form-group">
+                        <input class="form-control" name="nama" id="nama">
+                    </div>
+                    
+                    <label for="name" >No Telepon</label>
+                    <div class="form-group">
+                        <input class="form-control" name="no_telp" id="no_telp">
+                    </div>
                     
                     <label for="name">Provinsi</label>
                     <div class="form-group">
@@ -398,6 +416,12 @@
         var kota        = $(this).data('kota_id');
         var kecamatan   = $(this).data('kecamatan_id');
         var desa        = $(this).data('desa_id');
+        var no_telp     = $(this).data('no_telp');
+        var nama        = $(this).data('nama');
+        
+
+        $('.modal-body #nama').val(nama);
+        $('.modal-body #no_telp').val(no_telp);
        
         var cid = $(this).val();
         $.ajax({
@@ -465,9 +489,8 @@
 
     
     $('#saveBtn').click(function () {
-        setTimeout(() => {
-            savealamat();
-        }, 3000);
+        savealamat();
+ 
     });
 
     function savealamat() {
@@ -476,6 +499,9 @@
         url: "{{ route('alamat.store') }}",
         type: "POST",
         dataType: 'json',
+        beforeSend: function() {
+            $('body').loading('toggle');
+        },
         success: function(response){    
             $('#alamatForm').trigger("reset");
             $('#modalubah').modal('hide');
