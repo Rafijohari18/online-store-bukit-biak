@@ -27,7 +27,7 @@
     <div class="box-wrap padding-half">
         <div class="container">
             <div class="row">
-                @foreach($data['kambing']['data_kambing'] as $item)   
+                @foreach($data['kambing'] as $item)   
                
                 <div class="col-md-4 col-sm-6 mb-4">
                     
@@ -49,6 +49,10 @@
                 @endforeach
             </div>
         </div>
+        <div class="text-center">
+        {{ $data['kambing']->links() }}
+        </div>
+        
         
     </div>
 
