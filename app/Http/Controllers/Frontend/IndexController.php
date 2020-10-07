@@ -37,9 +37,42 @@ class IndexController extends Controller
     
         $kambing = $data['api']['data_kambing'];
 
+        $data['jumlah_kambing'] = count($kambing);
+        
         $data['kambing'] = $this->paginate($kambing);
 
+        $api_jenis = Http::get('http://apps.bukitbiak.com/api/jenis?secret_key=mFjYZTJfTJOlcm688Iey2Y2yyAB6IqKMVnh5L5pNKQfUG6pZuABkSZjGr9EPWK3Oy4KuBD6phJiwMhP6');
+        $data['api_jenis'] = $api_jenis->json();
+    
+        $data['jenis'] = $data['api_jenis']['jenis_kambing'];
+
+
         return view('frontend.index',compact('data'));
+    }
+
+    
+    public function filterJk(Request $request)
+
+    {    
+        $api = Http::get('https://apps.bukitbiak.com/api/client?secret_key=1hEISuIYPDHAkOoq4XQr0Z37xC6FBZWdxbrSkWghSqlEV2X7iX4hepbArzzgzGxVJg8GTYLcf7P0aMGCsWS7IpqCAnRcvnSPFKPT');
+        $data['api'] = $api->json();
+    
+        $kambing = collect($data['api']['data_kambing']);
+    
+
+        if($request->search == "laki"){
+            $data['kambing']      =  $this->paginate($kambing->where('kelamin',1)); 
+                
+        }elseif($request->search == "perempuan"){
+            $data['kambing']  =  $this->paginate($kambing->where('kelamin',0)); 
+        }elseif($request->search == "reset"){
+            $data['kambing']  =  $this->paginate($kambing);
+        }elseif($request->search == "jenis"){
+            $data['kambing']  =  $this->paginate($kambing->where('jenis_id',$request->jenis_id));
+        }
+
+        return view('frontend.filter-jk',compact('data'));
+       
     }
 
     public function paginate($items, $perPage = 9, $page = null, $options = [])
@@ -49,25 +82,6 @@ class IndexController extends Controller
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
-    public function filterJk(Request $request)
-
-    {    
-        $api = Http::get('https://apps.bukitbiak.com/api/client?secret_key=1hEISuIYPDHAkOoq4XQr0Z37xC6FBZWdxbrSkWghSqlEV2X7iX4hepbArzzgzGxVJg8GTYLcf7P0aMGCsWS7IpqCAnRcvnSPFKPT');
-        $data['api'] = $api->json();
-    
-        $kambing = collect($data['api']['data_kambing']);
-
-        if($request->search == "laki"){
-            $data['kambing']      =  $this->paginate($kambing->where('kelamin',1)); 
-                
-        }elseif($request->search == "perempuan"){
-            $data['kambing']  =  $this->paginate($kambing->where('kelamin',0)); 
-        }elseif($request->search == "reset"){
-            $data['kambing']  =  $this->paginate($kambing);
-        }
-        return view('frontend.filter-jk',compact('data'));
-
-    }
 
     public function history()
     {

@@ -18,7 +18,8 @@
             display: none;
         }
     }
-  
+   
+    
 </style>
 @endsection
 @section('content')
@@ -38,10 +39,27 @@
     </div>
     <div class="box-wrap padding-half">
         <div class="container">
-            <div class="card mb-3" style="border: none;">
-                <div class="col-md-12">
-                    <div class="btn-group float-right dropdown ml-2">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="las la-filter ml-4 pl-3"></i> Filter</button>
+            <div class="row mb-4">
+                <div class="col-md-8">
+                    <div class="float-left">
+                        <p class="font-weight-bold">Total Kambing : {{ $data['jumlah_kambing'] }}</p>
+                    </div>
+                </div>     
+               
+                <div class="col-md-2">          
+                    <div class="form-group">
+                        <select name="filter_jenis" id="filter" class="form-control" style="margin-top:-20px;">
+                                <option selected disabled>Filter Jenis Kambing</option>
+                            @foreach($data['jenis'] as $value)
+                                <option value="{{ $value['id'] }}">{{ $value['nama'] }}</option>
+                            @endforeach    
+                        </select>
+                       
+                    </div>          
+                </div>  
+                <div class="col-md-2">           
+                    <div class="btn-group dropdown">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Filter Jenis Kelamin</button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" onClick="laki()"><i class="las la-mars"></i><span>Jantan</span></a>
                             <a class="dropdown-item" onClick="perempuan()"><i class="las la-venus"></i><span>Betina</span></a>
@@ -49,6 +67,8 @@
                         </div>
                     </div>
                 </div>
+                
+                
             </div>
             <div class="row list-kambing" >           
                 @foreach($data['kambing'] as $item)   
@@ -56,8 +76,10 @@
                     
                         <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
                             <div class="card">
-                                <div class="card-img">
-                                    <img class="img-fluid img-thumbnail" src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}" alt="">
+                                <div class="kambing-img">
+                                    <div class="thumbnail-img">
+                                        <img src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}" alt="">
+                                    </div>
                                 </div>
                                 <div class="card-body">
                                     <h5 class="card-title">
@@ -84,7 +106,10 @@
 
 @endsection
 @section('js')
+
 <script>
+  
+     
     function laki(){
         $value     = 'laki';
         $.ajax({
@@ -121,5 +146,23 @@
             }
         });
     }
+    
+    $(document).ready(function() {
+
+    $('#filter').change(function(){
+
+      $value       = 'jenis';    
+      $jenis_id    = $(this).val();
+
+      $.ajax({
+          type : 'get',
+          url  : '{{ route('kambing.filter.jk') }}',
+          data: {'search':$value,'jenis_id':$jenis_id},
+          success:function(data){
+            $('.list-kambing').html(data);
+        }
+      });
+    });
+  });
 </script>
 @endsection

@@ -152,6 +152,22 @@
 				top: 0;
 				left: 0;
 			}
+			.thumbnail-img{
+				height: 100%;
+				left: 0;
+				overflow: hidden;
+				position: absolute;
+				top: 0;
+				width: 100%;
+			}
+			.kambing-img {
+				position: relative;
+				width: 400px;
+				height: 300px;
+				max-width: 100%;
+				overflow: hidden;
+				margin-bottom: 1.5em;
+			}
 		 </style>
     </head>
 
@@ -246,12 +262,12 @@
 										<h5 class="f-title">Explore</h5>
 										<div id="quicks">
 											<ul class="menu-quicks">
-												<li><a href="profile.html">Profil</a></li>
-												<li><a href="qurban.html">Qurban</a></li>
-												<li><a href="aqiqah.html">Aqiqah</a></li>
-												<li><a href="reseller.html">Reseller</a></li>
-												<li><a href="galeri-foto.html">Galeri</a></li>
-												<li><a href="contact.html">Kontak</a></li>
+												<li><a href="http://bukitbiak.com/page/tentang-bukit-biak">Profil</a></li>
+												<li><a href="http://bukitbiak.com/page/hewan-qurban">Qurban</a></li>
+												<li><a href="http://bukitbiak.com/page/hewan-aqiqah">Aqiqah</a></li>
+												<li><a href="http://bukitbiak.com/page/kerjasama-reseller">Reseller</a></li>
+												<li><a href="http://bukitbiak.com/post/galeri">Galeri</a></li>
+												<li><a href="http://bukitbiak.com/inquiry/kontak-kami">Kontak</a></li>
 											</ul>
 										</div>
 									</div>
@@ -389,9 +405,12 @@
         <script src="{{ asset('assets/temp_frontend/toastr/toastr.min.js') }}"></script>
 
 		<script src="{{ asset('js/jquery-loading-master/dist/jquery.loading.js') }}"></script>
+		<script src="{{ asset('assets/temp_frontend/js/fill.box.js')}}"></script>
         @yield('js')
 		<script>
 			$(document).ready(function() {
+
+				$('.thumbnail-img img').fillBox();
 				
 				$.ajax({
 					url: "{{ route('cart.count') }}",
