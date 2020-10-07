@@ -389,7 +389,8 @@
         <script src="{{ asset('assets/temp_frontend/toastr/toastr.min.js') }}"></script>
 
 		<script src="{{ asset('js/jquery-loading-master/dist/jquery.loading.js') }}"></script>
-        <script>
+        @yield('js')
+		<script>
 			$(document).ready(function() {
 				
 				$.ajax({

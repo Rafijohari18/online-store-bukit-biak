@@ -7,6 +7,18 @@
         width:100%;
         height:auto;
     }
+    .btn.btn-primary:hover {
+        background:#279220;
+    }
+    .btn-primary:not(:disabled):not(.disabled):active, .btn-primary:not(:disabled):not(.disabled).active, .show > .btn-primary.dropdown-toggle{
+        background:#279220;
+    }
+    @media screen and (max-width: 1199.98px){
+        .hidden {
+            display: none;
+        }
+    }
+  
 </style>
 @endsection
 @section('content')
@@ -26,10 +38,21 @@
     </div>
     <div class="box-wrap padding-half">
         <div class="container">
-            <div class="row">
+            <div class="card mb-3" style="border: none;">
+                <div class="col-md-12">
+                    <div class="btn-group float-right dropdown ml-2">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="las la-filter ml-4 pl-3"></i> Filter</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" onClick="laki()"><i class="las la-mars"></i><span>Jantan</span></a>
+                            <a class="dropdown-item" onClick="perempuan()"><i class="las la-venus"></i><span>Betina</span></a>
+                            <a class="dropdown-item" onClick="reset()"><i class="las la-sync"></i><span>Reset</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row list-kambing" >           
                 @foreach($data['kambing'] as $item)   
-               
-                <div class="col-md-4 col-sm-6 mb-4">
+                <div class="col-lg-4 col-md-3 col-12 mb-4">
                     
                         <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
                             <div class="card">
@@ -47,13 +70,56 @@
                      
                 </div>
                 @endforeach
+
+                <div class="text-center">
+                    {{ $data['kambing']->links() }}
+                </div>
             </div>
+            
         </div>
-        <div class="text-center">
-        {{ $data['kambing']->links() }}
-        </div>
+        
         
         
     </div>
 
+@endsection
+@section('js')
+<script>
+    function laki(){
+        $value     = 'laki';
+        $.ajax({
+            type : 'get',
+            url : '{{ route('kambing.filter.jk') }}',
+            data:{'search':$value},
+         
+            success:function(data){
+                $('.list-kambing').html(data);
+            }
+        });
+    }
+    function perempuan(){
+        $value      = 'perempuan';
+        $.ajax({
+            type : 'get',
+            url : '{{ route('kambing.filter.jk') }}',
+            data:{'search':$value},
+            
+            success:function(data){
+                $('.list-kambing').html(data);
+            }
+        });
+    }
+    function reset(){
+        $value      = 'reset';
+        $.ajax({
+            type : 'get',
+            url : '{{ route('kambing.filter.jk') }}',
+            data:{'search':$value},
+            
+            success:function(data){
+                $('.list-kambing').html(data);
+            }
+        });
+    }
+</script>
 @endsection

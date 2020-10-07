@@ -26,7 +26,6 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-
 class IndexController extends Controller
 {
 
@@ -37,20 +36,39 @@ class IndexController extends Controller
         $data['api'] = $api->json();
     
         $kambing = $data['api']['data_kambing'];
-       
 
         $data['kambing'] = $this->paginate($kambing);
-        
+
         return view('frontend.index',compact('data'));
     }
-    
+
     public function paginate($items, $perPage = 9, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
+
+    public function filterJk(Request $request)
+
+    {    
+        $api = Http::get('https://apps.bukitbiak.com/api/client?secret_key=1hEISuIYPDHAkOoq4XQr0Z37xC6FBZWdxbrSkWghSqlEV2X7iX4hepbArzzgzGxVJg8GTYLcf7P0aMGCsWS7IpqCAnRcvnSPFKPT');
+        $data['api'] = $api->json();
     
+        $kambing = collect($data['api']['data_kambing']);
+
+        if($request->search == "laki"){
+            $data['kambing']      =  $this->paginate($kambing->where('kelamin',1)); 
+                
+        }elseif($request->search == "perempuan"){
+            $data['kambing']  =  $this->paginate($kambing->where('kelamin',0)); 
+        }elseif($request->search == "reset"){
+            $data['kambing']  =  $this->paginate($kambing);
+        }
+        return view('frontend.filter-jk',compact('data'));
+
+    }
+
     public function history()
     {
         $data['history'] = Invoice::where('user_id',Auth::user()['id'])->where('status_transaksi','sukses')->with('cart')->paginate(15);
