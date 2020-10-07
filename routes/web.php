@@ -17,6 +17,7 @@ Route::get('/home/payment','App\Http\Controllers\Frontend\IndexController@home')
 
 Route::get('/', 'App\Http\Controllers\Frontend\IndexController@index');
 Route::get('/detail-kambing/{id}', 'App\Http\Controllers\Frontend\IndexController@detail')->name('detail.kambing');
+Route::get('/kambing/filter/jk', 'App\Http\Controllers\Frontend\IndexController@filterJk')->name('kambing.filter.jk');
 
 // login google
 Route::get('auth/google', 'App\Http\Controllers\Frontend\IndexController@redirectToGoogle')->name('google.login');
