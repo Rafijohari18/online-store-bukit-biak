@@ -3,6 +3,39 @@
 @section('title','Detail Kambing')
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
+<style>
+@media screen and (max-width: 991.98px){
+    .product-summary .box-info-price .box-btn > * {
+        width: 50%;
+    }
+    .product-summary .box-info-price .box-btn .btn.orange {
+        width: 100%;
+        border-radius: 0;
+    }
+    .product-summary .box-info-price .box-btn .btn.green {
+        width: 50%;
+        border-radius: 0;
+    }
+    .product-summary .box-info-price .box-btn {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        z-index: 1005;
+        display: flex;
+    }
+    
+}
+    .product-summary .box-info-price .box-btn {
+        display: flex;
+    }
+    @media screen and (max-width: 480px){
+        .title-heading h1 {
+            font-size: 28px;
+        }
+    }
+</style>
+
 @endsection
 
 @section('content')
@@ -44,8 +77,7 @@
                         </div>
                         
                         <div class="box-info-price">
-                           
-                          
+                        
                             
                             <div class="box-price">
                                 <div class="price-value">{{ $data['kambing']['harga'] != null ? 'Rp. '. number_format(($data['kambing']['harga'] ), 0, ',', '.') : 'Rp. 0' }}</div>
