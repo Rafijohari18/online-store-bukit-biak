@@ -209,7 +209,7 @@ class CheckoutService
 
         Mail::to(Auth::user()->email)->send(new PaymentEmail($list_invoice));
        
-        
+   
 
         return response()->json($this->response);
     }
