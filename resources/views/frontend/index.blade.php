@@ -3,6 +3,11 @@
 @section('title','Online Store')
 @section('css')
 <style>
+    .card {
+        box-shadow: 0 2px 4px 0 rgba(17,12,79,.1);
+        border: none;
+    }
+
     .card-img img {
         width:100%;
         height:auto;
@@ -18,6 +23,9 @@
             display: none;
         }
     }
+
+
+
     .bg-kambing {
         width:100%;
         height:280px;
@@ -31,18 +39,18 @@
         transform: scale(1.2);
     }
 
-   
+
     .title {
         display: block;
-        margin: 0 0 0 18px;
+        margin: 0 0 0 30px;
         max-height: 40px;
         overflow: hidden;
         cursor: pointer;
     }
     .price {
         font-weight: 550;
-        color: #FFCC55;
-        margin: 0 0 0 18px;
+        color: #279220;
+        margin: 0px 0 0 30px;
         font-size: 16px;
     }
     .owner {
@@ -51,7 +59,7 @@
         color: black;
         font-size: 13px;
         border-radius: 30px;
-        margin: 5px 15px 15px;
+        margin: 10px 30px 20px;
     }
 
     .owner-icon{
@@ -73,8 +81,8 @@
         overflow: hidden;
         width: calc(100% - 20px);
     }
-   
-    
+
+
 </style>
 
 <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
@@ -96,54 +104,65 @@
     </div>
     <div class="box-wrap padding-half">
         <div class="container">
-            <div class="row mb-4">
-                <div class="col-md-8">
-                    <div class="float-left">
-                        <p class="font-weight-bold">Total Kambing : {{ $data['jumlah_kambing'] }}</p>
-                    </div>
-                </div>     
-               
-                <div class="col-md-2">          
-                    <div class="form-group ">
-                        <select name="filter_jenis" id="filter" class="form-control" style="margin-top:-20px;">
-                                <option selected disabled>Filter Jenis Kambing</option>
+            <div class="row align-items-center mb-5">
+                <div class="col-md-6">
+                    <p class="font-weight-bold mb-xl-0">Total Kambing : {{ $data['jumlah_kambing'] }}</p>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="form-group mb-xl-0">
+                        <select name="filter_jenis" id="filter" class="form-control">
+                                <option selected disabled>Jenis Kambing</option>
                             @foreach($data['jenis'] as $value)
                                 <option value="{{ $value['id'] }}">{{ $value['nama'] }}</option>
-                            @endforeach    
+                            @endforeach
                         </select>
-                       
-                    </div>          
-                </div>  
-                <div class="col-md-2">           
-                    <div class="btn-group dropdown">
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group mb-xl-0">
+                    <select name="gender" id="gender" class="form-control">
+                        <option selected disabled>Jenis Kelamin</option>
+                        <option value="jantan">Jantan</option>
+                        <option value="betina">Betina</option>
+                    </select>
+                    <!-- <div class="btn-group dropdown">
                         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> Filter Jenis Kelamin</button>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" onClick="laki()"><i class="las la-mars"></i><span>Jantan</span></a>
                             <a class="dropdown-item" onClick="perempuan()"><i class="las la-venus"></i><span>Betina</span></a>
                             <a class="dropdown-item" onClick="reset()"><i class="las la-sync"></i><span>Reset</span></a>
                         </div>
+                    </div> -->
                     </div>
                 </div>
-                
-                
+                <div class="col-md-2">
+                    <div class="btn btn-primary btn-block">Reset</div>
+                </div>
+
+
             </div>
-            <div class="row list-kambing" >           
-                @foreach($data['kambing'] as $item)   
+            <div class="row list-kambing" >
+                @foreach($data['kambing'] as $item)
                 <div class="col-lg-3 col-sm-4  col-12 mb-4">
-                    
+
                         <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
                             <div class="card">
                                 <div class="kambing-img">
                                     <div class="thumbnail-img">
-                                        <img class="bg-kambing" src="{{ asset('assets/temp_frontend/images/loader.svg') }}" data-src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}">
+                                        <img class="bg-kambing" src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png')}}">
                                     </div>
+                                    <!-- <div class="loader-img">
+                                        <img class="bg-kambing" src="{{ asset('assets/temp_frontend/images/loader.svg') }}" data-src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}">
+                                    </div> -->
                                 </div>
-                              
+
                                 <div class="title">
-                                    <h5>
+                                    <h6>
                                         {{ $item['kode'] }}
-                                    </h5>
-                                </div> 
+                                    </h6>
+                                </div>
                                 <div class="price">
                                     {{ $item['harga'] != null ? 'Rp. '. number_format(($item['harga'] ), 0, ',', '.') : 'Rp. 0' }}
                                 </div>
@@ -152,27 +171,33 @@
                                         <i class="las la-dog"></i>
                                     </div>
                                     <div class="owner-info">
-                                        <span class="owner-desc">{{ $item['jenis'] }}</span>                                   
-                                        <span class="owner-desc float-right">{{ $item['kelamin'] == 1 ? 'Jantan' : 'Betina' }}</span>                                   
+                                        <span class="owner-desc">{{ $item['jenis'] }}</span>
+                                        <span class="owner-desc float-right">{{ $item['kelamin'] == 1 ? 'Jantan' : 'Betina' }}</span>
                                     </div>
                                 </div>
-                                
-                              
+
+
                             </div>
-                        </a>    
-                     
+                        </a>
+
                 </div>
                 @endforeach
 
-                <div class="text-center">
-                    {{ $data['kambing']->links() }}
+
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="nav-action">
+                        <a href="" class="item-nav-action m-0 mr-2">Sebelumnya</a>
+                        <a href="" class="item-nav-action m-0">Selanjutnya</a>
+                    </div>
                 </div>
             </div>
-            
+
         </div>
-        
-        
-        
+
+
+
     </div>
 
 @endsection
@@ -180,19 +205,19 @@
 <script src="{{ asset('assets/temp_frontend/js/jQuery.loadScroll.js') }}"></script>
 
 <script>
-    $(function() {  
+    $(function() {
         // Custom fadeIn Duration
         $('.bg-kambing').loadScroll(1000);
 
     });
-     
+
     function laki(){
         $value     = 'laki';
         $.ajax({
             type : 'get',
             url : '{{ route('kambing.filter.jk') }}',
             data:{'search':$value},
-         
+
             success:function(data){
                 $('.list-kambing').html(data);
             }
@@ -204,7 +229,7 @@
             type : 'get',
             url : '{{ route('kambing.filter.jk') }}',
             data:{'search':$value},
-            
+
             success:function(data){
                 $('.list-kambing').html(data);
             }
@@ -216,18 +241,18 @@
             type : 'get',
             url : '{{ route('kambing.filter.jk') }}',
             data:{'search':$value},
-            
+
             success:function(data){
                 $('.list-kambing').html(data);
             }
         });
     }
-    
+
     $(document).ready(function() {
 
     $('#filter').change(function(){
 
-      $value       = 'jenis';    
+      $value       = 'jenis';
       $jenis_id    = $(this).val();
 
       $.ajax({

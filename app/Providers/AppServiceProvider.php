@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
 	    Carbon::setLocale('id');
         date_default_timezone_set('Asia/Jakarta');
-   
+
         View::share([
             'count_keranjang'   => Cart::where('status',0)->where('user_id',Auth::user()['id'])
                                 ->count(),

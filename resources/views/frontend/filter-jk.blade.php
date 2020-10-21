@@ -1,26 +1,8 @@
 
-<style>
-    .thumbnail-img{
-        height: 100%;
-        left: 0;
-        overflow: hidden;
-        position: absolute;
-        top: 0;
-        width: 100%;
-}
-    .kambing-img {
-        position: relative;
-        width: 400px;
-        height: 300px;
-        max-width: 100%;
-        overflow: hidden;
-        margin-bottom: 1.5em;
-}
-</style>
 @if($data['kambing']->count())
-@foreach($data['kambing'] as $item)   
+@foreach($data['kambing'] as $item)
 <div class="col-lg-4 col-md-3 col-12 mb-4">
-    
+
         <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
             <div class="card">
                 <div class="kambing-img">
@@ -29,14 +11,14 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">
+                    <h6 class="card-title">
                             {{ $item['kode'] }}
-                    </h5>
+                    </h6>
                     <p class="card-text">{{ $item['harga'] != null ? 'Rp. '. number_format(($item['harga'] ), 0, ',', '.') : 'Rp. 0' }}</p>
                 </div>
             </div>
-        </a>    
-        
+        </a>
+
 </div>
 @endforeach
 
@@ -44,7 +26,7 @@
     {{ $data['kambing']->links() }}
 </div>
 @else
-<h1 class="text-danger text-center">Data Tidak Ditemukan</h1>
+<h5 class="text-danger text-center w-100 mt-5">Data Tidak Ditemukan !</h5>
 @endif
 
 
