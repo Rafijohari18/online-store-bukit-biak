@@ -115,7 +115,7 @@ class CheckoutService
         $list_invoice =  $this->invoice::with('cart')
         ->where('no_invoice',$invoice->no_invoice)->first();
 
-        // Mail::to(Auth::user()->email)->send(new CheckoutLiveEmail($list_invoice));
+        Mail::to(Auth::user()->email)->send(new CheckoutLiveEmail($list_invoice));
 
 
     }

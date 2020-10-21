@@ -60,10 +60,9 @@ class IndexController extends Controller
         $kambing = collect($data['api']['data_kambing']);
     
 
-        if($request->search == "laki"){
-            $data['kambing']      =  $this->paginate($kambing->where('kelamin',1)); 
-                
-        }elseif($request->search == "perempuan"){
+        if($request->search == "jantan"){
+            $data['kambing']     =  $this->paginate($kambing->where('kelamin',1)); 
+        }elseif($request->search == "betina"){
             $data['kambing']  =  $this->paginate($kambing->where('kelamin',0)); 
         }elseif($request->search == "reset"){
             $data['kambing']  =  $this->paginate($kambing);

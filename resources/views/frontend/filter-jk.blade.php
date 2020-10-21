@@ -1,30 +1,45 @@
 
 @if($data['kambing']->count())
 @foreach($data['kambing'] as $item)
-<div class="col-lg-4 col-md-3 col-12 mb-4">
+                <div class="col-lg-3 col-sm-4  col-12 mb-4">
 
-        <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
-            <div class="card">
-                <div class="kambing-img">
-                    <div class="thumbnail-img">
-                        <img src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}" alt="">
-                    </div>
+                        <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
+                            <div class="card">
+                                <div class="kambing-img">
+                                    <div class="thumbnail-img">
+                                        <img class="bg-kambing" src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png')}}">
+                                    </div>
+                                    <!-- <div class="loader-img">
+                                        <img class="bg-kambing" src="{{ asset('assets/temp_frontend/images/loader.svg') }}" data-src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}">
+                                    </div> -->
+                                </div>
+
+                                <div class="title">
+                                    <h6>
+                                        {{ $item['kode'] }}
+                                    </h6>
+                                </div>
+                                <div class="price">
+                                    {{ $item['harga'] != null ? 'Rp. '. number_format(($item['harga'] ), 0, ',', '.') : 'Rp. 0' }}
+                                </div>
+                                <div class="owner">
+                                    <div class="owner-icon">
+                                        <i class="las la-dog"></i>
+                                    </div>
+                                    <div class="owner-info">
+                                        <span class="owner-desc">{{ $item['jenis'] }}</span>
+                                        <span class="owner-desc float-right">{{ $item['kelamin'] == 1 ? 'Jantan' : 'Betina' }}</span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </a>
+
                 </div>
-                <div class="card-body">
-                    <h6 class="card-title">
-                            {{ $item['kode'] }}
-                    </h6>
-                    <p class="card-text">{{ $item['harga'] != null ? 'Rp. '. number_format(($item['harga'] ), 0, ',', '.') : 'Rp. 0' }}</p>
-                </div>
-            </div>
-        </a>
+                @endforeach
+                {{ $data['kambing']->links('pagination.default') }}
 
-</div>
-@endforeach
-
-<div class="text-center">
-    {{ $data['kambing']->links() }}
-</div>
 @else
 <h5 class="text-danger text-center w-100 mt-5">Data Tidak Ditemukan !</h5>
 @endif

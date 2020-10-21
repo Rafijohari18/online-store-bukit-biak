@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="btn btn-primary btn-block">Reset</div>
+                    <div class="btn btn-primary btn-block" onClick="reset()">Reset</div>
                 </div>
 
 
@@ -183,16 +183,12 @@
                 </div>
                 @endforeach
 
+                {{ $data['kambing']->links('pagination.default') }}
+            </div>
 
-            </div>
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="nav-action">
-                        <a href="" class="item-nav-action m-0 mr-2">Sebelumnya</a>
-                        <a href="" class="item-nav-action m-0">Selanjutnya</a>
-                    </div>
-                </div>
-            </div>
+           
+            
+        
 
         </div>
 
@@ -237,6 +233,7 @@
     }
     function reset(){
         $value      = 'reset';
+
         $.ajax({
             type : 'get',
             url : '{{ route('kambing.filter.jk') }}',
@@ -264,6 +261,21 @@
         }
       });
     });
+
+    $('#gender').change(function(){
+        $value       = $(this).val();
+        
+        $.ajax({
+            type : 'get',
+            url  : '{{ route('kambing.filter.jk') }}',
+            data: {'search':$value},
+            success:function(data){
+            $('.list-kambing').html(data);
+        }
+        });
+    });
+
+    
   });
 </script>
 @endsection

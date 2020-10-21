@@ -158,12 +158,12 @@
             url: "{{ route('cart.store') }}",
             type: "POST",
             dataType: 'json',
-            success: function(response){
-
-                if (response.success === true) {
-                    swal("Sukses!", response.message, "success");
-                }else if(response.success === false){
-                    swal("Gagal!", response.message, "error");
+            success: function(data){
+            
+                if (data.success == true) {
+                    swal("Sukses!", data.message, "success");
+                }else if(data.success == false){
+                    swal("Gagal!", data.message, "error");
                 }
             },
             error: function (data) {

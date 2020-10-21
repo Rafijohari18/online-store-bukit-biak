@@ -47,6 +47,8 @@ class CheckoutController extends Controller
         $cart = Cart::where('kode',$request->kode)
                       ->where('user_id',$request->user_id)
                       ->where('status',0)->count();
+
+             
         if($cart > 0){
             $data = null;
             $success = false;
@@ -82,7 +84,7 @@ class CheckoutController extends Controller
         $success = true;
         $message = "Data Berhasil di Simpan, Silahkan Lanjutkan Transaksi";
               
-
+        
         return Response::json(
             [
                 'success' => $success,
