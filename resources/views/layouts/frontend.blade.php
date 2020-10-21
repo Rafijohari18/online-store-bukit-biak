@@ -168,6 +168,9 @@
 				overflow: hidden;
 				margin-bottom: 1.5em;
 			}
+			footer {
+				padding-bottom:0px;
+			}
 		 </style>
     </head>
 
@@ -250,7 +253,7 @@
 								<div class="col-md-6 col-lg-3">
 									<div class="widget mb-4">
 										<div class="logo-footer">
-											<img src="images/logo-ori.svg" alt="">
+											<img src="{{ asset('assets/temp_frontend/images/logo-ori.svg')}}" alt="">
 										</div>
 											<div class="footer-copyright">
 												© 2020 <a href="index.html">Bukit Biak</a>. All Rights Reserved

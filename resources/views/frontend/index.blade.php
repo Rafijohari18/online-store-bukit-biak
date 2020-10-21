@@ -18,9 +18,66 @@
             display: none;
         }
     }
+    .bg-kambing {
+        width:100%;
+        height:280px;
+        transition: all .2s ease-in-out;
+    }
+    .bg-kambing:hover, .bg-kambing:focus {
+        -ms-transform: scale(1.2);
+        -moz-transform: scale(1.2);
+        -webkit-transform: scale(1.2);
+        -o-transform: scale(1.2);
+        transform: scale(1.2);
+    }
+
+   
+    .title {
+        display: block;
+        margin: 0 0 0 18px;
+        max-height: 40px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .price {
+        font-weight: 550;
+        color: #FFCC55;
+        margin: 0 0 0 18px;
+        font-size: 16px;
+    }
+    .owner {
+        display: flex;
+        justify-content: flex-start;
+        color: black;
+        font-size: 13px;
+        border-radius: 30px;
+        margin: 5px 15px 15px;
+    }
+
+    .owner-icon{
+        position: relative;
+        display: flex;
+        height: 22px;
+        width: 22px;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        color: #fff;
+        border-radius: 100%;
+        font-size: 13px;
+        margin-right: 5px;
+    }
+   .owner-info {
+        position: relative;
+        height: 20px;
+        overflow: hidden;
+        width: calc(100% - 20px);
+    }
    
     
 </style>
+
+<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
 @endsection
 @section('content')
     <div class="banner-breadcrumb">
@@ -47,7 +104,7 @@
                 </div>     
                
                 <div class="col-md-2">          
-                    <div class="form-group">
+                    <div class="form-group ">
                         <select name="filter_jenis" id="filter" class="form-control" style="margin-top:-20px;">
                                 <option selected disabled>Filter Jenis Kambing</option>
                             @foreach($data['jenis'] as $value)
@@ -72,21 +129,35 @@
             </div>
             <div class="row list-kambing" >           
                 @foreach($data['kambing'] as $item)   
-                <div class="col-lg-4 col-md-3 col-12 mb-4">
+                <div class="col-lg-3 col-sm-4  col-12 mb-4">
                     
                         <a href="{{ Route('detail.kambing',['id'=> $item['id']]) }}">
                             <div class="card">
                                 <div class="kambing-img">
                                     <div class="thumbnail-img">
-                                        <img src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}" alt="">
+                                        <img class="bg-kambing" src="{{ asset('assets/temp_frontend/images/loader.svg') }}" data-src="{{ $item['photo'] != null ? 'https://apps.bukitbiak.com/'.$item['photo'][0] : asset('assets/temp_frontend/images/default.png') }}">
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                            {{ $item['kode'] }}
+                              
+                                <div class="title">
+                                    <h5>
+                                        {{ $item['kode'] }}
                                     </h5>
-                                    <p class="card-text">{{ $item['harga'] != null ? 'Rp. '. number_format(($item['harga'] ), 0, ',', '.') : 'Rp. 0' }}</p>
+                                </div> 
+                                <div class="price">
+                                    {{ $item['harga'] != null ? 'Rp. '. number_format(($item['harga'] ), 0, ',', '.') : 'Rp. 0' }}
                                 </div>
+                                <div class="owner">
+                                    <div class="owner-icon">
+                                        <i class="las la-dog"></i>
+                                    </div>
+                                    <div class="owner-info">
+                                        <span class="owner-desc">{{ $item['jenis'] }}</span>                                   
+                                        <span class="owner-desc float-right">{{ $item['kelamin'] == 1 ? 'Jantan' : 'Betina' }}</span>                                   
+                                    </div>
+                                </div>
+                                
+                              
                             </div>
                         </a>    
                      
@@ -106,9 +177,14 @@
 
 @endsection
 @section('js')
+<script src="{{ asset('assets/temp_frontend/js/jQuery.loadScroll.js') }}"></script>
 
 <script>
-  
+    $(function() {  
+        // Custom fadeIn Duration
+        $('.bg-kambing').loadScroll(1000);
+
+    });
      
     function laki(){
         $value     = 'laki';

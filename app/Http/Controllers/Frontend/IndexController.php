@@ -75,7 +75,7 @@ class IndexController extends Controller
        
     }
 
-    public function paginate($items, $perPage = 9, $page = null, $options = [])
+    public function paginate($items, $perPage = 8, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
