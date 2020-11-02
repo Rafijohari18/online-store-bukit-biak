@@ -648,12 +648,6 @@
 // 			});
 
 
-			$('.clear-all').click(function(){
-				localStorage.removeItem('cart');
-				toastr.success('Keranjang Berhail Dikosongkan !');
-				loadkeranjang();
-			});
-
 		});
 
 
