@@ -46,7 +46,7 @@ class CheckoutService
     }
 
     public function storeAlamat($request){
-        
+
         $this->alamat::updateOrCreate(['user_id' => $request->user_id],
         [
             'nama'          => $request->nama,
@@ -54,10 +54,10 @@ class CheckoutService
             'provinsi_id'   => $request->provinsi_id,
             'kota_id'       => $request->kota_id,
             'kecamatan_id'  => $request->kecamatan_id,
-            'desa_id'       => $request->desa_id,  
-           
-        ]);     
-    
+            'desa_id'       => $request->desa_id,
+
+        ]);
+
     }
 
     public function storeCart($request){
@@ -67,8 +67,8 @@ class CheckoutService
             'jenis'      => $request->jenis,
             'harga'      => $request->harga,
             'user_id'    => $request->user_id,
-        ]);   
-    
+        ]);
+
     }
 
     public function checkoutLive($request)
@@ -79,13 +79,13 @@ class CheckoutService
             'harga'      => $request->harga,
             'user_id'    => $request->user_id,
             'status'     => 1,
-        ]);   
+        ]);
 
 
         $query      = $this->invoice->orderBy('id','DESC')->first();
         $carbonNow  = Carbon::now();
         $user       =  Auth::user()['name'] ;
-                   
+
         if ($query != null) {
             $kd = ((int)$query->id) + 1;
         }else {
@@ -98,32 +98,32 @@ class CheckoutService
             } else {
             $no_invoice = "$kd/INV-STORE-TERNAK/$user/$carbonNow->month/$carbonNow->year";
             }
-          
-      
+
+
         $invoice  = $this->invoice::create([
             'no_invoice'     => $no_invoice,
             'user_id'        => Auth::user()['id'],
-        ]);   
-        
-       
-            
+        ]);
+
+
+
         $cart_invoice  = $this->cart_invoice::create([
                 'cart_id'     => $cart->id,
                 'invoice_id'  => $invoice->id,
-        ]);   
+        ]);
 
         $list_invoice =  $this->invoice::with('cart')
         ->where('no_invoice',$invoice->no_invoice)->first();
-    
+
         Mail::to(Auth::user()->email)->send(new CheckoutLiveEmail($list_invoice));
-   
-        
+
+
     }
 
     public function checkout($request)
     {
         $id_cart    = $request->id;
-        
+
         $this->cart::whereIn('id',$id_cart)->update([
             'status'        => 1,
          ]);
@@ -132,7 +132,7 @@ class CheckoutService
         $query      = $this->invoice->orderBy('id','DESC')->first();
         $carbonNow  = Carbon::now();
         $user       =  Auth::user()['name'] ;
-                   
+
         if ($query != null) {
             $kd = ((int)$query->id) + 1;
         }else {
@@ -145,34 +145,34 @@ class CheckoutService
             } else {
             $no_invoice = "$kd/INV-STORE-TERNAK/$user/$carbonNow->month/$carbonNow->year";
             }
-          
-      
+
+
         $invoice  = $this->invoice::create([
             'no_invoice'     => $no_invoice,
             'user_id'        => Auth::user()['id'],
-        ]);   
-        
+        ]);
+
         foreach($id_cart as $cart){
-            
+
             $cart_invoice  = $this->cart_invoice::create([
                 'cart_id'     => $cart,
                 'invoice_id'  => $invoice->id,
-            ]);   
+            ]);
         }
 
         $list_invoice =  $this->invoice::with('cart')
         ->where('no_invoice',$invoice->no_invoice)->first();
-    
+
         Mail::to(Auth::user()->email)->send(new  CheckoutEmail($list_invoice));
-       
-        
+
+
 
         }
 
     public function submit($request){
-       
+
         \DB::transaction(function() use($request){
-            
+
             $payload = [
                 'transaction_details' => [
                     'order_id'      => $request->kodeinvoice,
@@ -189,7 +189,7 @@ class CheckoutService
                         'price'    => $request->jumlah,
                         'quantity' => 1,
                         'name'     => 'Order Domba',
-                      
+
                     ]
                 ]
             ];
@@ -199,17 +199,17 @@ class CheckoutService
                         'snap_token'        =>  $snapToken,
                         'status_transaksi'  => 'pending',
                     ]);
-        
+
             $this->response['snap_token'] = $snapToken;
         });
-        
+
         $list_invoice =  $this->invoice::with('cart','User')
         ->where('id',$request->idinvoice)->first();
-        
+
 
         Mail::to(Auth::user()->email)->send(new PaymentEmail($list_invoice));
-       
-        
+
+
 
         return response()->json($this->response);
     }
@@ -243,8 +243,8 @@ class CheckoutService
         ]
       ]);
 
-     
-            
+
+
       if ($transaction == 'capture') {
         if ($type == 'credit_card') {
 
@@ -253,7 +253,7 @@ class CheckoutService
               'status_transaksi'  => 'pending'
             ]);
           } else {
-        
+
             $invoice->update([
               'status_transaksi'  => 'sukses',
             ]);
@@ -267,17 +267,17 @@ class CheckoutService
 
       } elseif($transaction == 'pending'){
         $invoice->update([
-         
+
           'status_transaksi'  => 'pending'
         ]);
       } elseif ($transaction == 'deny') {
         $invoice->update([
-         
+
           'status_transaksi'  => 'ditolak'
         ]);
       } elseif ($transaction == 'expire') {
         $invoice->update([
-          
+
           'status_transaksi'  => 'kadaluarsa'
         ]);
       } elseif ($transaction == 'cancel') {
@@ -285,9 +285,9 @@ class CheckoutService
           'status_transaksi'  => 'gagal'
         ]);
       }
-  
+
       });
-  
+
       return 'Sukses !';
       }
 
@@ -295,4 +295,3 @@ class CheckoutService
 
 }
 
-  

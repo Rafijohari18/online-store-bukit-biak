@@ -6,16 +6,17 @@
 <style>
 @media screen and (max-width: 991.98px){
     .product-summary .box-info-price .box-btn > * {
-        width: 50%;
+        min-width: 50%;
+        border-radius: 0;
     }
-    .product-summary .box-info-price .box-btn .btn.orange {
+    /* .product-summary .box-info-price .box-btn .btn.orange {
         width: 100%;
         border-radius: 0;
     }
     .product-summary .box-info-price .box-btn .btn.green {
         width: 50%;
         border-radius: 0;
-    }
+    } */
     .product-summary .box-info-price .box-btn {
         position: fixed;
         width: 100%;
@@ -24,7 +25,7 @@
         z-index: 1005;
         display: flex;
     }
-    
+
 }
     .product-summary .box-info-price .box-btn {
         display: flex;
@@ -64,49 +65,48 @@
                 <div class="col-lg-6 ">
                     <img src="{{ $data['kambing']['photo'] != null ? 'https://apps.bukitbiak.com/'.$data['kambing']['photo'][0] : asset('assets/temp_frontend/images/default.png') }}" class="photo-kambing">
                 </div>
-                <div class="col-lg-6 single-product-info">
+                <div class="col-lg-6">
                     <div class="product-summary">
                         <div class="box-category">
-                           
-                                {{ $data['kambing']['jenis'] }}
-                           
-                        </div><br>
-                        
-                        <div class="title-heading">
-                            <h1>{{ $data['kambing']['kode'] }}</h1>
+                            {{ $data['kambing']['jenis'] }}
+
                         </div>
-                        
+
+                        <div class="title-heading">
+                            <h2>{{ $data['kambing']['kode'] }}</h2>
+                        </div>
+
                         <div class="box-info-price">
-                        
-                            
+
+
                             <div class="box-price">
                                 <div class="price-value">{{ $data['kambing']['harga'] != null ? 'Rp. '. number_format(($data['kambing']['harga'] ), 0, ',', '.') : 'Rp. 0' }}</div>
                             </div>
-                            <div class="box-btn">
+                            <div class="box-btn mt-xl-0 ">
                                 @if(Auth::user())
-                                <a target="_Blank"  id="btn-order" target="_blank" data-kode="{{ $data['kambing']['kode'] }}" data-harga="{{ $data['kambing']['harga'] }}" 
-                                    data-jenis="{{ $data['kambing']['jenis'] }}" data-user="{{ Auth::user()['id'] }}">
-                                    <button class="btn orange">Beli Sekarang</button></a>
-                                <a class="btn green addcart" id="addkeranjang"  title="Tambah ke Keranjang" data-kode="{{ $data['kambing']['kode'] }}" 
+                                <a target="_Blank"  id="btn-order" target="_blank" data-kode="{{ $data['kambing']['kode'] }}" data-harga="{{ $data['kambing']['harga'] }}"
+                                    data-jenis="{{ $data['kambing']['jenis'] }}" data-user="{{ Auth::user()['id'] }}" class="btn orange mr-lg-2">
+                                    <span>Beli Sekarang</span></a>
+                                <a class="btn green addcart" id="addkeranjang"  title="Tambah ke Keranjang" data-kode="{{ $data['kambing']['kode'] }}"
                                 data-jenis="{{ $data['kambing']['jenis'] }}" data-harga="{{ $data['kambing']['harga'] }}" data-user="{{ Auth::user()['id'] }}" >
-                                    <span>Masukkan Keranjang</span><i class="las la-cart-plus"></i>
+                                    <span>Keranjang</span><i class="las la-cart-plus"></i>
                                 </a>
 
-                               
+
 
                                 @else
-                                <a target="_blank" href="{{ route('register') }}">
-                                    <button class="btn orange">Beli Sekarang</button></a>
+                                <a target="_blank" href="{{ route('register') }}" class="btn orange mr-lg-2">
+                                    <span>Beli Sekarang</span></a>
                                 <a class="btn green" href="{{ route('register') }}">
-                                    <span>Masukkan Keranjang</span><i class="las la-cart-plus"></i>
+                                    <span>Keranjang</span><i class="las la-cart-plus"></i>
                                 </a>
 
 
                                 @endif
-                                
+
                             </div>
-                            
-                        
+
+
                         </div>
                         <div class="box-description">
                             <article class="content">
@@ -115,17 +115,17 @@
                                 <p>Unggulan : {{ $data['kambing']['unggulan'] == 1 ? 'Ya' : 'Tidak' }}</p>
                                 <p>Jenis Kelamin : {{ $data['kambing']['kelamin'] == 1 ? 'Jantan' : 'Betina' }}</p>
                             </article>
-                            
-                            
+
+
                         </div>
-                        
-                        
+
+
                 </div>
             </div>
-            
+
         </div>
     </div>
-     
+    <div id="#div1"></div>
 </div>
 
 @endsection
@@ -136,7 +136,7 @@
 
 
      $(document).ready(function(){
-        
+
      $(function() {
 
         $.ajaxSetup({
@@ -146,25 +146,30 @@
         });
 
         $('#addkeranjang').click(function () {
-      
+
 
         var kode        = $(this).data('kode');
         var jenis       = $(this).data('jenis');
         var harga       = $(this).data('harga');
-        var user_id     = $(this).data('user');  
-    
+        var user_id     = $(this).data('user');
+
         $.ajax({
             data: {'kode':kode,'jenis':jenis,'harga':harga,'user_id':user_id},
             url: "{{ route('cart.store') }}",
             type: "POST",
             dataType: 'json',
-            success: function(response){
-                
-                if (response.success === true) {
-                    swal("Sukses!", response.message, "success");
-                }else if(response.success === false){
-                    swal("Gagal!", response.message, "error");
+             beforeSend: function() {
+                    $('body').loading('toggle');
+                },
+            success: function(data){
+                $
+                if (data.success == true) {
+                    swal("Sukses!", data.message, "success");
+                }else if(data.success == false){
+                    swal("Gagal!", data.message, "error");
                 }
+                
+                
             },
             error: function (data) {
             }
@@ -176,9 +181,9 @@
             var kode        = $(this).data('kode');
             var jenis       = $(this).data('jenis');
             var harga       = $(this).data('harga');
-            var user_id     = $(this).data('user');  
+            var user_id     = $(this).data('user');
 
-    
+
             $.ajax({
                 data: {'kode':kode,'jenis':jenis,'harga':harga,'user_id':user_id},
                 url: "{{ route('checkout.live') }}",
@@ -193,7 +198,7 @@
                         window.location.href = "{{ route('checkout.form') }}";
                         swal("Sukses!", response.message, "success");
                     }
-                    
+
                 },
                 error: function (data) {
                     console.log('Error:', data);
@@ -201,14 +206,14 @@
                 }
 
             });
-                
-     
+
+
     });
 });
 });
-            
-         
-           
+
+
+
 
         //via local storage
         // $('#addkeranjang').click(function(){
@@ -220,7 +225,7 @@
 		// 		var kode     = $(this).data('kode');
 		// 		var harga    = $(this).data('harga');
 		// 		var user     = $(this).data('user');
-                
+
 		// 		var count    = 1;
 		// 		var data = {
 		// 			id:id,
@@ -231,7 +236,7 @@
 		// 		};
 
 		// 		let cari = _.find(storage, {id: id});
-				
+
 		// 		if(_.isObject(cari)){
 		// 			toastr.error('Produk Sudah Ada !');
 		// 			return false;

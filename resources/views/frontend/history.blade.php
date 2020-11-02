@@ -27,67 +27,69 @@
     </div>
     <div class="box-wrap padding-half">
         <div class="container">
-            <div class="row">
-                <table class="table table-bordered table-hover table-striped table-light sortable">
-                    <thead>
-                        <tr>
-                            <th data-defaultsort="asc">#</th>
-                            <th>No Invoice</th>
-                            <th>Kode Kambing</th>
-                            <th>Jenis Kambing</th>
-                            <th>Harga Kambing</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                        
-                        @foreach($data['history'] as $item)
-                      
-                        <tr>
-                            <th scope="row">{{ $loop->iteration  }}</th>
-                            <td>{{ $item->no_invoice }}</td>
+            <div class="row green">
+                <div class="table-responsive price-product">
+                    <table class="table table-hover sortable">
+                        <thead>
+                            <tr>
+                                <th data-defaultsort="asc">#</th>
+                                <th>No Invoice</th>
+                                <th>Kode Kambing</th>
+                                <th>Jenis Kambing</th>
+                                <th>Harga Kambing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-                            <td>
-                                @foreach($item->cart as $cart)
-                                    <ul>
-                                        <li> - {{ $cart->kode }}</li>
-                                    </ul>
-                                @endforeach
-                            </td>
-                            <td>
-                                @foreach($item->cart as $cart)
-                                    <ul>
-                                        <li class="list-history"> - {{ $cart->jenis }}</li>
-                                    </ul>
-                                @endforeach
-                            </td>
-                            <td>
-                            
-                                @foreach($item->cart as $cart)
-                                    <ul>
-                                        <li class="list-history"> Rp. {{ number_format(($cart->harga), 0, ',', '.') }}</li>
-                                    </ul>
-                                @endforeach
-                            </td>
-                        </tr>
-                       
-                        @endforeach
-                        <tr>
-                            <td colspan="5" class="text-danger">
-                                @if(count($data['history']) == 0)
-                                    <p class="text-danger text-center">Data masih kosong !!</p>        
-                                @endif
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-               
+
+                            @foreach($data['history'] as $item)
+
+                            <tr>
+                                <th scope="row">{{ $loop->iteration  }}</th>
+                                <td>{{ $item->no_invoice }}</td>
+
+                                <td>
+                                    @foreach($item->cart as $cart)
+                                        <ul>
+                                            <li> - {{ $cart->kode }}</li>
+                                        </ul>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach($item->cart as $cart)
+                                        <ul>
+                                            <li class="list-history"> - {{ $cart->jenis }}</li>
+                                        </ul>
+                                    @endforeach
+                                </td>
+                                <td>
+
+                                    @foreach($item->cart as $cart)
+                                        <ul>
+                                            <li class="list-history"> Rp. {{ number_format(($cart->harga), 0, ',', '.') }}</li>
+                                        </ul>
+                                    @endforeach
+                                </td>
+                            </tr>
+
+                            @endforeach
+                            <tr>
+                                <td colspan="5" class="text-danger">
+                                    @if(count($data['history']) == 0)
+                                        <p class="text-danger text-center">Data masih kosong !!</p>
+                                    @endif
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
                 <div class="text-center mt-3">
                     {{ $data['history']->links() }}
                 </div>
         </div>
-        
+
     </div>
 
 @endsection

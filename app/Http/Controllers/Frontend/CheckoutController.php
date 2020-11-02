@@ -47,14 +47,17 @@ class CheckoutController extends Controller
         $cart = Cart::where('kode',$request->kode)
                       ->where('user_id',$request->user_id)
                       ->where('status',0)->count();
-        if($cart > 0){
-            $data = null;
-            $success = false;
-            $message = "Domba Telah di Keranjang";
-        }else{
+
+       
+        if($cart == 0){
             $data = $this->checkout->storeCart($request);
             $success = true;
             $message = "Keranjang Berhasil di Simpan";
+        }else{
+            $data = null;
+            $success = false;
+            $message = "Domba Telah di Keranjang";
+           
         }             
 
         
@@ -82,7 +85,7 @@ class CheckoutController extends Controller
         $success = true;
         $message = "Data Berhasil di Simpan, Silahkan Lanjutkan Transaksi";
               
-
+        
         return Response::json(
             [
                 'success' => $success,
