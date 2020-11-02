@@ -125,7 +125,7 @@
 
         </div>
     </div>
-    <div id="#div1"></div>
+
 </div>
 
 @endsection
@@ -162,7 +162,6 @@
                     $('body').loading('toggle');
                 },
             success: function(data){
-                $
                 if (data.success == true) {
                     swal("Sukses!", data.message, "success");
                 }else if(data.success == false){
