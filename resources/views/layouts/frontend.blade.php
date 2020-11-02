@@ -184,7 +184,7 @@
 		$segment4 = Request::segment(4);
 	@endphp
 
-
+			
 
 		<div id="page">
 			<header>
@@ -324,13 +324,9 @@
 
 						<input type="hidden" name="user_id" value="{{ Auth::user()['id'] != null ? Auth::user()['id'] : '' }}">
 					</div>
-					<div class="modal-footer">
-					@if($count_keranjang > 0)
-						<button type="button" class="btn clear-all btn-danger mr-lg-2" data-dismiss="modal" data-user_id="{{ Auth::user()['id'] }}">
-                            <span>Hapus Semua</span><i class="las la-trash-alt"></i>
-                        </button>
-                        <button type="submit" class="btn btn-primary" id="checkout">Checkout</button>
-					@endif
+					<div class="modal-footer count-user-cart">
+
+					
 					</div>
 					</form>
 					</div>
@@ -423,8 +419,15 @@
 					url: "{{ route('cart.count') }}",
 					type: "get",
 					success: function(response){
-
 						$('.cart-wr').html(response);
+					},
+				});
+
+				$.ajax({
+					url: "{{ route('cart.user.count') }}",
+					type: "get",
+					success: function(response){
+						$('.count-user-cart').html(response);
 					},
 				});
 

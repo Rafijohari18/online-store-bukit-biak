@@ -52,6 +52,8 @@ Route::post('checkout/payment', 'App\Http\Controllers\Frontend\CheckoutControlle
 // cek cart
 Route::get('check/cart', 'App\Http\Controllers\Frontend\IndexController@getCart')->name('cart.check');
 Route::get('cart/count', 'App\Http\Controllers\Frontend\IndexController@countCart')->name('cart.count');
+Route::get('cart/user/count', 'App\Http\Controllers\Frontend\IndexController@countuserCart')->name('cart.user.count');
+
 
 Route::get('check/delete', 'App\Http\Controllers\Frontend\IndexController@delete')->name('cart.delete');
 Route::get('check/deleteAll', 'App\Http\Controllers\Frontend\IndexController@deleteAll')->name('cart.deleteAll');

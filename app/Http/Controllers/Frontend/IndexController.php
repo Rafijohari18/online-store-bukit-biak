@@ -226,6 +226,14 @@ class IndexController extends Controller
 
        return view('frontend.count-cart',compact('data'));
     }
+
+    public function countuserCart(Request $request)
+    {
+        $data = Cart::where('user_id',Auth::user()['id'])
+        ->whereIn('status',[0,1])->count();
+
+        return view('frontend.count-cart-user',compact('data'));
+    }
     public function delete(Request $request)
     {
        $data =  Cart::where('id',$request->id)->delete();
