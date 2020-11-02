@@ -325,10 +325,12 @@
 						<input type="hidden" name="user_id" value="{{ Auth::user()['id'] != null ? Auth::user()['id'] : '' }}">
 					</div>
 					<div class="modal-footer">
+					@if($count_keranjang > 0)
 						<button type="button" class="btn clear-all btn-danger mr-lg-2" data-dismiss="modal" data-user_id="{{ Auth::user()['id'] }}">
                             <span>Hapus Semua</span><i class="las la-trash-alt"></i>
                         </button>
                         <button type="submit" class="btn btn-primary" id="checkout">Checkout</button>
+					@endif
 					</div>
 					</form>
 					</div>
@@ -637,7 +639,6 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut",
             }
-<<<<<<< HEAD
 
 
 // 			$('.clear-all').click(function(){
@@ -645,7 +646,6 @@
 // 				toastr.success('Keranjang Berhail Dikosongkan !');
 // 				loadkeranjang();
 // 			});
-=======
 
 
 			$('.clear-all').click(function(){
@@ -653,7 +653,6 @@
 				toastr.success('Keranjang Berhail Dikosongkan !');
 				loadkeranjang();
 			});
->>>>>>> 05cc29c518e6efaf4f2f729396b2b291809f32f2
 
 		});
 

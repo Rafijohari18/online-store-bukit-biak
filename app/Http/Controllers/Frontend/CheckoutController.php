@@ -56,7 +56,7 @@ class CheckoutController extends Controller
         }else{
             $data = null;
             $success = false;
-            $message = "Domba Telah di Keranjang";
+            $message = "Domba Telah di Keranjang";  
            
         }             
 

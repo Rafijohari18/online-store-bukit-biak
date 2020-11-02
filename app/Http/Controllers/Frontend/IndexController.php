@@ -214,7 +214,7 @@ class IndexController extends Controller
     public function getCart(Request $request)
     {   
         $data['cart'] = Cart::where('user_id',Auth::user()['id'])
-                        ->where('status',0)->get();
+                        ->whereIn('status',[0,1])->get();
         
         return view('frontend.getCart',compact('data'));
     }
@@ -222,7 +222,7 @@ class IndexController extends Controller
     public function countCart(Request $request)
     {
         $data['cart'] = Cart::where('user_id',Auth::user()['id'])
-                        ->where('status',0)->count();
+                        ->whereIn('status',[0,1])->count();
 
        return view('frontend.count-cart',compact('data'));
     }

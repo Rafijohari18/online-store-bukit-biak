@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         date_default_timezone_set('Asia/Jakarta');
 
         View::share([
-            'count_keranjang'   => Cart::where('status',0)->where('user_id',Auth::user()['id'])
+            'count_keranjang'   => Cart::whereIn('status',[0,1])->where('user_id',Auth::user()['id'])
                                 ->count(),
         ]);
     }

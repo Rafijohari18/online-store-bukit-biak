@@ -206,11 +206,10 @@ class CheckoutService
         $list_invoice =  $this->invoice::with('cart','User')
         ->where('id',$request->idinvoice)->first();
 
+  
+      
 
-        Mail::to(Auth::user()->email)->send(new PaymentEmail($list_invoice));
-
-
-
+      
         return response()->json($this->response);
     }
 
@@ -223,6 +222,9 @@ class CheckoutService
         $orderId = $notif->order_id;
         $fraud = $notif->fraud_status;
         $invoice = Invoice::where('no_invoice',$orderId)->first();
+
+        $id_invoice = $invoice->id; 
+        $cart_invoice =  CartInvoice::where('invoice_id',$id_invoice)->get();
 
         $invoice->update([
         'api_midtrans' => [
@@ -258,12 +260,20 @@ class CheckoutService
               'status_transaksi'  => 'sukses',
             ]);
 
+            foreach($cart_invoice as $cart){
+                Cart::whereIn('id', [$cart->cart_id])->update(['status' => 2]);
+            }
+
           }
         }
       } elseif ($transaction == 'settlement') {
             $invoice->update([
               'status_transaksi'  => 'sukses'
             ]);
+
+            foreach($cart_invoice as $cart){
+              Cart::whereIn('id', [$cart->cart_id])->update(['status' => 2]);
+            }
 
       } elseif($transaction == 'pending'){
         $invoice->update([
