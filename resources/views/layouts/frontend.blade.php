@@ -637,7 +637,6 @@
                 "showMethod": "fadeIn",
                 "hideMethod": "fadeOut",
             }
-<<<<<<< HEAD
 
 
 // 			$('.clear-all').click(function(){
@@ -645,15 +644,7 @@
 // 				toastr.success('Keranjang Berhail Dikosongkan !');
 // 				loadkeranjang();
 // 			});
-=======
 
-
-			$('.clear-all').click(function(){
-				localStorage.removeItem('cart');
-				toastr.success('Keranjang Berhail Dikosongkan !');
-				loadkeranjang();
-			});
->>>>>>> 05cc29c518e6efaf4f2f729396b2b291809f32f2
 
 		});
 
