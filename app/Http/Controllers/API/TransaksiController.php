@@ -15,8 +15,6 @@ class TransaksiController extends Controller
     public function getData(Request $request)
     {
         $success = Invoice::with('cart','User')->whereIn('status_transaksi',['sukses','pending'])->get();
-        
-        
         return response()->json(['success'=> $success], $this->successStatus); 
     }
 }
