@@ -5,7 +5,7 @@
 @foreach($data['cart'] as $key =>  $val)
 
 <li class="list-group-item d-flex justify-content-between align-items-center">
-    <input type="checkbox" name="id[]" value="{{ $val['id'] }}">
+    <input type="checkbox" name="id[]" value="{{ $val['id'] }}" checked>
     <input type="hidden" name="user_id[]" value="{{ $val['user_id'] }}" >
     
     <span class="produk-text">{{ $val['kode'] }}</span>

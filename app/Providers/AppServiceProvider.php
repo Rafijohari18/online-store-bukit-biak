@@ -29,11 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(Request $request)
     {
-    
-
         View::share([
-            'count_keranjang'   => Cart::whereIn('status',[0,1])->where('user_id',Auth::user()['id'])
-                                ->count(),
+            'count_keranjang'   => Cart::where('user_id',Auth::user()['id'])
+                                ->whereIn('status',[0,1])->count(),
         ]);
     }
 }
