@@ -34,10 +34,16 @@ class IndexController extends Controller
         // via http
         $api = Http::get('https://apps.bukitbiak.com/api/client?secret_key=1hEISuIYPDHAkOoq4XQr0Z37xC6FBZWdxbrSkWghSqlEV2X7iX4hepbArzzgzGxVJg8GTYLcf7P0aMGCsWS7IpqCAnRcvnSPFKPT');
         $data['api'] = $api->json();
+        
     
         $kambing = $data['api']['data_kambing'];
-
-        $data['jumlah_kambing'] = count($kambing);
+        
+        if($kambing != null){
+           $data['jumlah_kambing'] = count($kambing); 
+        }else{
+            $data['jumlah_kambing'] = 0;
+        }
+        
         
         $data['kambing'] = $this->paginate($kambing);
 

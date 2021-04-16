@@ -147,7 +147,6 @@
 
         $('#addkeranjang').click(function () {
 
-
         var kode        = $(this).data('kode');
         var jenis       = $(this).data('jenis');
         var harga       = $(this).data('harga');
@@ -158,20 +157,16 @@
             url: "{{ route('cart.store') }}",
             type: "POST",
             dataType: 'json',
-             beforeSend: function() {
-                    $('body').loading('toggle');
-                },
+          
             success: function(data){
                 if (data.success == true) {
                     swal("Sukses!", data.message, "success");
                 }else if(data.success == false){
                     swal("Gagal!", data.message, "error");
                 }
-                
-                
+                 setInterval('refreshPage()', 2000);
             },
-            error: function (data) {
-            }
+           
 
         });
     });
@@ -193,7 +188,6 @@
                 },
                 success: function(response){
                     if (response.success === true) {
-                        $('#cartmodal').modal('hide');
                         window.location.href = "{{ route('checkout.form') }}";
                         swal("Sukses!", response.message, "success");
                     }
@@ -210,6 +204,10 @@
     });
 });
 });
+
+    function refreshPage() {
+        location.reload(true);
+    }
 
 
 

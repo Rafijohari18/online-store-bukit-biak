@@ -81,6 +81,7 @@ class CheckoutController extends Controller
 
     public function checkoutLive(Request $request)
     {
+        
         $data = $this->checkout->checkoutLive($request);
         $success = true;
         $message = "Data Berhasil di Simpan, Silahkan Lanjutkan Transaksi";

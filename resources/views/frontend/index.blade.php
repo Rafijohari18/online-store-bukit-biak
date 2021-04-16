@@ -113,9 +113,11 @@
                     <div class="form-group mb-xl-0">
                         <select name="filter_jenis" id="filter" class="form-control">
                                 <option selected disabled>Jenis Kambing</option>
+                            @if($data['jenis'] != null)
                             @foreach($data['jenis'] as $value)
                                 <option value="{{ $value['id'] }}">{{ $value['nama'] }}</option>
                             @endforeach
+                            @endif
                         </select>
 
                     </div>

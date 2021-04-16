@@ -49,6 +49,7 @@
                                 <td>{{ $item->no_invoice }}</td>
 
                                 <td>
+                                    
                                     @foreach($item->cart as $cart)
                                         <ul>
                                             <li> - {{ $cart->kode }}</li>

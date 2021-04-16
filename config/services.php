@@ -32,14 +32,14 @@ return [
     'google' => [
         'client_id' => '695294047734-ho44dgerll8b93ng8lh358npi569i4rm.apps.googleusercontent.com',
         'client_secret' => '4pCWq-1ZGsCr7rskMLLqDkDN',
-        'redirect' => 'http://online-store.com/auth/google/callback/',
+        'redirect' => 'http://store.bukitbiak.com/auth/google/callback/',
      
     ],
 
     'midtrans' => [
         'serverKey'     => env('MIDTRANS_SERVERKEY'),
         'clientKey'     => env('MIDTRANS_CLIENTKEY'),
-        'isProduction'  => env('MIDTRANS_IS_PRODUCTION', false),
+        'isProduction'  => env('MIDTRANS_IS_PRODUCTION', true),
         'isSanitized'   => env('MIDTRANS_IS_SANITIZED', true),
         'is3ds'         => env('MIDTRANS_IS_3DS', true),                
     ],

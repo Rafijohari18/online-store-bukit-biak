@@ -31,7 +31,7 @@
 		<link rel="stylesheet" href="{{ asset('assets/temp_frontend/css/lightgallery.css')}}">
 		<link rel="stylesheet" href="{{ asset('assets/temp_frontend/toastr/toastr.min.css') }}">
 		<link rel="stylesheet" href="{{ asset('js/jquery-loading-master/demo/demo.css') }}">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.min.css">
 		 @yield('css')
 
 		 <style>
@@ -149,14 +149,7 @@
 				top: 0;
 				left: 0;
 			}
-			.thumbnail-img{
-				height: 100%;
-				left: 0;
-				overflow: hidden;
-				position: absolute;
-				top: 0;
-				width: 100%;
-			}
+		
 
             .kambing-img {
                 position: relative;
@@ -389,8 +382,9 @@
 		<!-- jQuery.min.js -->
 		<script src="{{ asset('assets/temp_frontend/js/jquery.min.js')}}"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.2.0/sweetalert2.all.min.js"></script>
 		   <!-- jQuery Global-->
-        <script src="{{ asset('assets/temp_frontend/js/fill.box.js')}}"></script>
+        <!--<script src="{{ asset('assets/temp_frontend/js/fill.box.js')}}"></script>-->
 	 	<script src="{{ asset('assets/temp_frontend/js/bootstrap.min.js')}}"></script>
         <script src="{{ asset('assets/temp_frontend/js/main.js')}}"></script>
 
@@ -413,8 +407,7 @@
 		<script>
 			$(document).ready(function() {
 
-				$('.thumbnail-img img').fillBox();
-
+			
 				$.ajax({
 					url: "{{ route('cart.count') }}",
 					type: "get",
@@ -462,15 +455,15 @@
 					url: "{{ route('cart.delete') }}",
 					type: "get",
 					dataType: 'json',
-					beforeSend: function() {
-                        $('body').loading('toggle');
-                    },
+					
 					success: function(response){
 
 						if (response.success === true) {
 							swal("Sukses!", response.message, "success");
 							show();
+							setInterval('refreshPage()', 2000);
 						}
+						
 					},
 					error: function (data) {
 					}
@@ -492,7 +485,8 @@
 				// loadkeranjang();
     		});
 
-			$('.clear-all').click(function(){
+			$('#clear-all').click(function(){
+		
 				var user_id     = $(this).data('user_id');
 
 				$.ajax({
@@ -500,26 +494,26 @@
 					url: "{{ route('cart.deleteAll') }}",
 					type: "get",
 					dataType: 'json',
-					beforeSend: function() {
-                        $('body').loading('toggle');
-                    },
 					success: function(response){
-
+                        
 						if (response.success === true) {
 							swal("Sukses!", response.message, "success");
 							show();
 						}
 					},
-					error: function (data) {
-					}
+					
 
 				});
 
-
+    	        window.history.back() 
 				// localStorage.removeItem('cart');
 				// toastr.success('Keranjang Berhasil Dikosongkan !');
 				// loadkeranjang();
 			});
+            
+             function refreshPage() {
+                location.reload(true);
+            }
 
 
 			function loadkeranjang(){
@@ -656,5 +650,5 @@
 
 		</script>
 
-		@yield('js')
+	
 </html>
