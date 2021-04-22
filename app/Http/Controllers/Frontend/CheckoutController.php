@@ -16,6 +16,7 @@ use Session;
 use DB;
 use App\Services\CheckoutService;
 use App\Repositories\Repository;
+use RafiJohari\RajaOngkir\Cost;
 
 
 class CheckoutController extends Controller
@@ -109,7 +110,18 @@ class CheckoutController extends Controller
         return redirect()->back()->with('success','Transaksi Berhasil di Batalkan !');
     }
 
+    public function check_ongkir(Request $request)
+    {
 
+        $kota_asal_id = $request->city_origin;
+        $kota_tujuan_id = $request->city_destination;
+        $berat = $request->weight; // dalam gram
+        $kurir =  $request->courier;
+
+        $biaya = Cost::getcost($kota_asal_id, $kota_tujuan_id, $berat, $kurir);
+
+        return response()->json($biaya);
+    }
 
     
 }

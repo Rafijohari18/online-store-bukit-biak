@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
+        "kavist/rajaongkir": "^1.1",
         "laravel/framework": "^8.0",
         "laravel/jetstream": "^1.3",
         "laravel/passport": "^10.0",
@@ -21,6 +22,8 @@
         "livewire/livewire": "^2.0",
         "midtrans/midtrans-php": "^2.3",
         "nesbot/carbon": "^2.40",
+        "rafijohari/rajaongkir": "dev-master",
+        "steevenz/rajaongkir": "^2.2",
         "veritrans/veritrans-php": "dev-master"
     },
     "require-dev": {

@@ -10,7 +10,8 @@ use Response;
 use Http;
 use Socialite;
 use App\Models\User;
-use App\Models\Provinsi;
+use App\Models\Province;
+use App\Models\City;
 use App\Models\Kota;
 use App\Models\Kecamatan;
 use App\Models\Desa;
@@ -18,6 +19,7 @@ use App\Models\Donation;
 use App\Models\Alamat;
 use App\Models\Cart;
 use App\Models\Invoice;
+use App\Models\TarifBiaya;
 use Auth;
 use Session;
 use DB;
@@ -25,9 +27,11 @@ use Crypt;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use RafiJohari\RajaOngkir\Location;
 
 class IndexController extends Controller
 {
+
 
     public function index(Request $request)
     {
@@ -180,25 +184,28 @@ class IndexController extends Controller
     public function checkoutForm(Request $request)
     {
         $data['session']    = Session::get('checkout');
-        $data['provinsi']   =  Provinsi::get();
-        $data['kota']       =  Kota::get();
-        $data['kecamatan']  =  Kecamatan::get();
-        $data['desa']       =  Desa::get();
-        $data['alamat']     = Alamat::with('Provinsi')
+        $data['provinsi']   =  Province::all();
+
+    
+        $data['kota']       =  Location::getkota();
+                            // $data['kecamatan']  =  Kecamatan::get();
+        // $data['desa']       =  Desa::get();
+        $data['alamat']     = Alamat::with('Province','City')
                              ->where('user_id',Auth::user()['id'])->first();
+        
         $data['invoice']    = Invoice::with('cart')
                               ->where('user_id',Auth::user()['id'])
                               ->orderBy('id','DESC')->first();
 
-      
+        $data['cost']      = TarifBiaya::where('user_id',Auth::user()['id'])
+                            ->orderBy('id','DESC')->get();
         return view('frontend.checkout',compact('data'));
     }
 
     public function getKota($id)
     {
-        $states = DB::table("kota")
-                    ->where("provinsi_id",$id)
-                    ->pluck("kota","id");
+        $states = City::where('province_id', $id)->pluck('name', 'city_id');
+        
         return response()->json($states);
     }
 

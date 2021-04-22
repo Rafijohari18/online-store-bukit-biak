@@ -9,12 +9,12 @@ class Alamat extends Model
     protected $table = 'alamat';
     protected $guarded = [];
 
-    public function Provinsi()
+    public function Province()
     {
-    	return $this->belongsTo('App\Models\Provinsi','provinsi_id');
+    	return $this->belongsTo('App\Models\Province','provinsi_id');
     }
-     public function Kota(){
-        return $this->belongsTo('App\Models\Kota','kota_id');
+     public function City(){
+        return $this->belongsTo('App\Models\City','kota_id');
     }
     public function Kecamatan()
     {

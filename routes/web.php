@@ -42,6 +42,7 @@ Route::get('checkout/getKecamatan/{id}', 'App\Http\Controllers\Frontend\IndexCon
 Route::get('checkout/getDesa/{id}', 'App\Http\Controllers\Frontend\IndexController@getDesa');
 
 // checkout 
+Route::post('cek/ongkir', 'App\Http\Controllers\Frontend\CheckoutController@check_ongkir');
 Route::post('/alamat/store', 'App\Http\Controllers\Frontend\CheckoutController@storeAlamat')->name('alamat.store');
 Route::post('/checkout/store', 'App\Http\Controllers\Frontend\CheckoutController@store')->name('checkout.store');
 Route::post('/cart/store', 'App\Http\Controllers\Frontend\CheckoutController@storeCart')->name('cart.store');
@@ -79,6 +80,10 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::post('/finish', function(){
     return redirect()->route('welcome');
 })->name('donation.finish');
+
+Route::get('/ongkir', 'App\Http\Controllers\CheckOngkirController@index');
+Route::post('/ongkir', 'App\Http\Controllers\CheckOngkirController@check_ongkir');
+Route::get('/cities/{province_id}', 'App\Http\Controllers\CheckOngkirController@getCities');
 
 
 

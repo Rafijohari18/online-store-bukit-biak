@@ -38,22 +38,25 @@
         </div>
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-8">
                     <div class="card checkout-box">
-                        <h5 class="card-header">Alamat Saya</h5>
+                        <h5 class="card-header">
+                         <i class="fa fa-home"></i> Kirim ke mana ?</h5>
                         <div class="card-body">
                            <p class="card-text float-right ml-2 editbtn" style="text-decoration:underline;" data-toggle="modal" data-target="#modalubah"
                                data-nama ="{{  $data['alamat'] != null ? $data['alamat']->nama : ''  }}" data-no_telp ="{{  $data['alamat'] != null ? $data['alamat']->no_telp : ''  }}"
-                           data-provinsi_id ="{{  $data['alamat'] != null ? $data['alamat']->provinsi_id : ''  }}"  data-kota_id ="{{  $data['alamat'] != null ? $data['alamat']->kota_id : ''  }}"  data-kecamatan_id ="{{  $data['alamat'] != null ? $data['alamat']->kecamatan_id : ''  }}"  data-desa_id ="{{  $data['alamat'] != null ? $data['alamat']->desa_id : ''  }}">Ubah </p>
+                               data-alamat ="{{  $data['alamat'] != null ? $data['alamat']->alamat : ''  }}" data-provinsi_id ="{{  $data['alamat'] != null ? $data['alamat']->provinsi_id : ''  }}"  
+                               data-kota_id ="{{  $data['alamat'] != null ? $data['alamat']->kota_id : ''  }}"  data-kecamatan_id ="{{  $data['alamat'] != null ? $data['alamat']->kecamatan_id : ''  }}"  
+                               data-desa_id ="{{  $data['alamat'] != null ? $data['alamat']->desa_id : ''  }}">Ubah </p>
 
-                           <p class="card-text"><span style="font-weight: 700;">Nama Toko :</span> {{  $data['alamat'] != null ? $data['alamat']->nama : ''  }}</p>
+                           <p class="card-text"><span style="font-weight: 700;">Nama Penerima :</span> {{  $data['alamat'] != null ? $data['alamat']->nama : ''  }}</p>
                            <p class="card-text"><span style="font-weight: 700;">No Telepon :</span> {{  $data['alamat'] != null ? $data['alamat']->no_telp : ''  }}</p>
                            <p class="capitalize" style="text-transform: capitalize;"><span style="font-weight: 700;">Alamat :</span>
+                                
                                 @if($data['alamat'] != null)
-                                    <?php echo ucwords(strtolower($data['alamat']->Provinsi->name)) ?> ,
-                                    <?php echo ucwords(strtolower($data['alamat']->Kota->kota)) ?> ,
-                                    <?php echo ucwords(strtolower($data['alamat']->Kecamatan->kecamatan)) ?> ,
-                                    <?php echo ucwords(strtolower($data['alamat']->Desa->desa)) ?>
+                                    {{ $data['alamat']['alamat'] }}
+                                    <?php echo ucwords(strtolower($data['alamat']->Province->name)) ?> ,
+                                    <?php echo ucwords(strtolower($data['alamat']->City->name)) ?>
 
                                 @endif
                             </p>
@@ -62,7 +65,43 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-lg-4">
+                    <div class="card checkout-box">
+                        <h5 class="card-header">
+                         Pilih Kurir </h5>
+
+                      
+                        
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input type="hidden" id="berat" value="{{ $data['invoice']->cart->sum('berat') }}">
+                                <select class="form-control kurir" id="kurir" name="kurir"
+                                data-kota_id ="{{  $data['alamat'] != null ? $data['alamat']->kota_id : ''  }}">                               
+                                        <option value="0">-- pilih kurir --</option>
+                                        <option value="jne">JNE</option>
+                                        <option value="pos">POS</option>
+                                        <option value="tiki">TIKI</option>
+                        
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="card d-none checkongkir">
+                                    <div class="card-body">
+                                        <ul class="list-group" id="checkongkir"></ul>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
             </div>
+
 
 
             <div class="row mt-5">
@@ -103,10 +142,9 @@
                                         <h6>Alamat Pengiriman : </h6>
                                         <p>
                                             @if($data['alamat'] != null)
-                                            <?php echo ucwords(strtolower($data['alamat']->Provinsi->name)) ?> ,
-                                            <?php echo ucwords(strtolower($data['alamat']->Kota->kota)) ?> ,
-                                            <?php echo ucwords(strtolower($data['alamat']->Kecamatan->kecamatan)) ?> ,
-                                            <?php echo ucwords(strtolower($data['alamat']->Desa->desa)) ?>
+                                                {{ $data['alamat']['alamat'] }}
+                                                <?php echo ucwords(strtolower($data['alamat']->Province->name)) ?> ,
+                                                <?php echo ucwords(strtolower($data['alamat']->City->name)) ?>
                                             @else
                                             -
                                             @endif
@@ -144,6 +182,7 @@
                                                 @php
                                                     $id     = $cart->id;
                                                     $total += $cart->harga;
+                                            
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $cart->kode }}</td>
@@ -155,8 +194,14 @@
                                                 <tfoot>
                                                 <tr>
                                                     <td></td>
+                                                    <td>Ongkos kirim & Penanganan</td>
+                                                    <td id="ongkirs"> 
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
                                                     <td>Total</td>
-                                                    <td>Rp. {{ number_format(($total), 0, ',', '.') }} </td>
+                                                    <td id="total">Rp. {{ number_format(($total), 0, ',', '.') }} </td>
                                                     <input type="hidden" id="total" value="{{ $total }}">
                                                 </tr>
                                                 </tfoot>
@@ -218,12 +263,13 @@
                         <input class="form-control" name="no_telp" id="no_telp">
                     </div>
 
+
                     <label for="name">Provinsi</label>
                     <div class="form-group">
                         <select class="form-control mt-2" name="provinsi_id" id="id_provinsi" required >
                             <option disabled selected >Pilih Provinsi</option>
-                            @foreach ($data['provinsi'] as $row)
-                            <option value="{{ $row->id }}" @if($data['alamat'] != null) {{ $row->id  == $data['alamat']->provinsi_id ? 'selected' : ''}} @endif>{{ $row->name }}</option>
+                            @foreach($data['provinsi'] as $prov)
+                                <option value="{{ $prov->id }}" @if($data['alamat'] != null) {{ $prov->id  == $data['alamat']->provinsi_id ? 'selected' : ''}} @endif>{{ $prov['name'] }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -235,21 +281,11 @@
                         </select>
                     </div>
 
-                    <label for="name">Kecamatan</label>
+                    <label for="name">Alamat Lengkap</label>
                     <div class="form-group">
-                        <select name="kecamatan_id" id="kecamatan" class="form-control" required>
-                            <option value="" ></option>
-                        </select>
-
+                        <textarea name="alamat" id="alamat" class="form-control"></textarea>
                     </div>
 
-                    <label for="name">Desa</label>
-                    <div class="form-group">
-                        <select name="desa_id" id="desa" class="form-control" required>
-                            <option value="" ></option>
-                        </select>
-
-                    </div>
 
                 </div>
 
@@ -296,6 +332,85 @@
             $('#desa').select2({
                 dropdownParent: $('#modalubah'),
                 width: '100%'
+            });
+
+            
+            $('#kurir').change(function (e) {
+            e.preventDefault();
+            
+
+            var kota_id    = $(this).data('kota_id');
+            
+            let token            = $("meta[name='csrf-token']").attr("content");
+            let city_origin      = 430;
+            let city_destination = kota_id;
+            let courier          = $('select[name=kurir]').val();
+            let weight           = $('#berat').val();
+            
+            jQuery.ajax({
+                url: "/cek/ongkir",
+                data: {
+                    _token:              token,
+                    city_origin:         city_origin,
+                    city_destination:    city_destination,
+                    courier:             courier,
+                    weight:              weight,
+                },
+                dataType: "JSON",
+                type: "POST",
+                success: function (response) {
+                    isProcessing = false;
+                    if (response) {
+                        $('#checkongkir').empty();
+                        $('.checkongkir').addClass('d-block');
+                        $.each(response[0]['costs'], function (key, value) {
+                            $('#checkongkir').append('<li class="list-group-item"><input type="checkbox" name="paket1" id="paket1" value="1" class="mr-3">'+response[0].code.toUpperCase()+' : <strong>'+value.service+'</strong> - Rp. '+value.cost[0].value+' ('+value.cost[0].etd+' hari)</li>')
+                        });
+
+                    }
+                }
+            });
+
+
+
+        });
+
+        $('#paket1').on('change', function() { 
+            console.log('tesss');
+            // From the other examples
+            if (!this.checked) {
+                var sure = confirm("Are you sure?");
+                this.checked = !sure;
+            }
+        });
+
+        $('#ongkir').change(function(){
+                alert('tes');
+
+                var cid = $(this).val();
+                
+                var ongkir = parseFloat(cid).toLocaleString(window.document.documentElement.lang);
+                $('#ongkirs').text(ongkir);
+
+                var total = '{{$total}}';
+                
+                var sum = parseInt(cid) + parseInt(total);
+                
+                var totalakhir = parseFloat(sum).toLocaleString(window.document.documentElement.lang);
+
+                $('#total').text(totalakhir);
+                
+                if(cid){
+                    $.ajax({
+                        
+                        success:function(res){
+                        if(res)
+                        {
+            
+                        }
+                    }
+                });
+                }
             });
 
 
@@ -356,7 +471,6 @@
     $('#id_provinsi').change(function(){
 
     var cid = $(this).val();
-
     if(cid){
         $.ajax({
             type:"get",
@@ -370,70 +484,73 @@
                     $("#kota").append('<option value="'+key+'">'+value+'</option>');
                 });
                 $('#kota').selectpicker('refresh');
+
             }
         }
     });
 }
 });
 
-    $('#kota').change(function(){
+//     $('#kota').change(function(){
 
-    var cid = $(this).val();
+//     var cid = $(this).val();
 
-    if(cid){
-        $.ajax({
-            type:"get",
-            url:'/checkout/getKecamatan/' + cid,
-            success:function(res){
-            if(res)
-            {
-                $("#kecamatan").empty();
-                $("#kecamatan").append('<option>Pilih Kecamatan</option>');
-                $.each(res,function(key,value){
-                    $("#kecamatan").append('<option value="'+key+'">'+value+'</option>');
-                });
-                $('#kecamatan').selectpicker('refresh');
-            }
-        }
-    });
-    }
-});
+//     if(cid){
+//         $.ajax({
+//             type:"get",
+//             url:'/checkout/getKecamatan/' + cid,
+//             success:function(res){
+//             if(res)
+//             {
+//                 $("#kecamatan").empty();
+//                 $("#kecamatan").append('<option>Pilih Kecamatan</option>');
+//                 $.each(res,function(key,value){
+//                     $("#kecamatan").append('<option value="'+key+'">'+value+'</option>');
+//                 });
+//                 $('#kecamatan').selectpicker('refresh');
+//             }
+//         }
+//     });
+//     }
+// });
 
-    $('#kecamatan').change(function(){
+//     $('#kecamatan').change(function(){
 
-    var cid = $(this).val();
+//     var cid = $(this).val();
 
-    if(cid){
-        $.ajax({
-            type:"get",
-            url:'/checkout/getDesa/' + cid,
-            success:function(res){
-            if(res)
-            {
-                $("#desa").empty();
-                $("#desa").append('<option>Pilih Desa</option>');
-                $.each(res,function(key,value){
-                    $("#desa").append('<option value="'+key+'">'+value+'</option>');
-                });
-                $('#desa').selectpicker('refresh');
-            }
-        }
-    });
-    }
-});
+//     if(cid){
+//         $.ajax({
+//             type:"get",
+//             url:'/checkout/getDesa/' + cid,
+//             success:function(res){
+//             if(res)
+//             {
+//                 $("#desa").empty();
+//                 $("#desa").append('<option>Pilih Desa</option>');
+//                 $.each(res,function(key,value){
+//                     $("#desa").append('<option value="'+key+'">'+value+'</option>');
+//                 });
+//                 $('#desa').selectpicker('refresh');
+//             }
+//         }
+//     });
+//     }
+// });
 
     $('.editbtn').click(function(){
 
         var provinsi    = $(this).data('provinsi_id');
         var kota        = $(this).data('kota_id');
-        var kecamatan   = $(this).data('kecamatan_id');
-        var desa        = $(this).data('desa_id');
+        // var kecamatan   = $(this).data('kecamatan_id');
+        // var desa        = $(this).data('desa_id');
         var no_telp     = $(this).data('no_telp');
         var nama        = $(this).data('nama');
+        var alamat      = $(this).data('alamat');
 
 
         $('.modal-body #nama').val(nama);
         $('.modal-body #no_telp').val(no_telp);
+        $('.modal-body #alamat').val(alamat);
 
         var cid = $(this).val();
         $.ajax({
@@ -450,40 +567,40 @@
                     $('#kota').selectpicker('val', kota);
                     $('#kota').selectpicker('refresh');
                 }
-                $.ajax({
-                    type:"get",
-                    url:'/checkout/getKecamatan/' + kota,
-                    success:function(res){
-                        if(res)
-                        {
-                            $("#kecamatan").empty();
-                            $("#kecamatan").append('<option>Pilih Kecamatan</option>');
-                            $.each(res,function(key,value){
-                                $("#kecamatan").append('<option value="'+key+'">'+value+'</option>');
-                            });
-                            $('#kecamatan').selectpicker('val', kecamatan);
-                            $('#kecamatan').selectpicker('refresh');
-                        }
+                // $.ajax({
+                //     type:"get",
+                //     url:'/checkout/getKecamatan/' + kota,
+                //     success:function(res){
+                //         if(res)
+                //         {
+                //             $("#kecamatan").empty();
+                //             $("#kecamatan").append('<option>Pilih Kecamatan</option>');
+                //             $.each(res,function(key,value){
+                //                 $("#kecamatan").append('<option value="'+key+'">'+value+'</option>');
+                //             });
+                //             $('#kecamatan').selectpicker('val', kecamatan);
+                //             $('#kecamatan').selectpicker('refresh');
+                //         }
 
-                            $.ajax({
-                                type:"get",
-                                url:'/checkout/getDesa/' + kecamatan,
-                                success:function(res){
-                                if(res)
-                                {
-                                    $("#desa").empty();
-                                    $("#desa").append('<option>Pilih Desa</option>');
-                                    $.each(res,function(key,value){
-                                        $("#desa").append('<option value="'+key+'">'+value+'</option>');
-                                    });
-                                    $('#desa').selectpicker('val', desa);
-                                    $('#desa').selectpicker('refresh');
-                                }
-                            }
-                        });
+                //             $.ajax({
+                //                 type:"get",
+                //                 url:'/checkout/getDesa/' + kecamatan,
+                //                 success:function(res){
+                //                 if(res)
+                //                 {
+                //                     $("#desa").empty();
+                //                     $("#desa").append('<option>Pilih Desa</option>');
+                //                     $.each(res,function(key,value){
+                //                         $("#desa").append('<option value="'+key+'">'+value+'</option>');
+                //                     });
+                //                     $('#desa').selectpicker('val', desa);
+                //                     $('#desa').selectpicker('refresh');
+                //                 }
+                //             }
+                //         });
 
-                    }
-                });
+                //     }
+                // });
             }
         });
 

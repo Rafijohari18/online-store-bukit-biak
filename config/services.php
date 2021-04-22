@@ -43,6 +43,12 @@ return [
         'isSanitized'   => env('MIDTRANS_IS_SANITIZED', true),
         'is3ds'         => env('MIDTRANS_IS_3DS', true),                
     ],
+   
+    'rajaongkir' => [
+        'api_key'       => env('RAJAONGKIR_API_KEY'),
+        'account_type'  => 'starter', //starter,basic,pro          
+    ],
+
 
    
 

@@ -22,6 +22,7 @@ class CreateAlamatTable extends Migration
             $table->unsignedBigInteger('kota_id')->nullable();
             $table->unsignedBigInteger('kecamatan_id')->nullable();
             $table->unsignedBigInteger('desa_id')->nullable();
+            $table->text('alamat')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')

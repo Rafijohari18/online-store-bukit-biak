@@ -19,6 +19,8 @@ class CreateInvoiceTable extends Migration
             $table->string('status_transaksi')->default('pending');
             $table->string('snap_token')->nullable();
             $table->text('api_midtrans')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('ongkir')->nullable();
             $table->timestamps();
             
             $table->foreign('user_id')->references('id')->on('users')

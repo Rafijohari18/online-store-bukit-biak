@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Transaksi;
 use App\Models\CartInvoice;
 use App\Models\Invoice;
+use App\Models\TarifBiaya;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -21,17 +22,20 @@ use App\Mail\CheckoutLiveEmail;
 use App\Mail\CheckoutEmail;
 use App\Mail\PaymentEmail;
 use Illuminate\Support\Facades\Mail;
+use RafiJohari\RajaOngkir\Cost;
+
 
 class CheckoutService
 {
-    private $alamat,$cart,$transaksi,$invoice,$cart_invoice;
+    private $alamat,$cart,$transaksi,$invoice,$cart_invoice,$tarifbiaya;
 
     public function __construct(
         Alamat $alamat,
         Cart $cart,
         Transaksi $transaksi,
         CartInvoice $cart_invoice,
-        Invoice $invoice
+        Invoice $invoice,
+        TarifBiaya $tarifbiaya
         )
     {
         $this->alamat = $alamat;
@@ -39,6 +43,7 @@ class CheckoutService
         $this->transaksi = $transaksi;
         $this->cart_invoice = $cart_invoice;
         $this->invoice = $invoice;
+        $this->tarifbiaya = $tarifbiaya;
         Veritrans_Config::$serverKey = config('services.midtrans.serverKey');
         Veritrans_Config::$isProduction = config('services.midtrans.isProduction');
         Veritrans_Config::$isSanitized = config('services.midtrans.isSanitized');
@@ -53,32 +58,78 @@ class CheckoutService
             'no_telp'       => $request->no_telp,
             'provinsi_id'   => $request->provinsi_id,
             'kota_id'       => $request->kota_id,
-            'kecamatan_id'  => $request->kecamatan_id,
-            'desa_id'       => $request->desa_id,
-
+            'alamat'         => $request->alamat,
+            // 'kecamatan_id'  => $request->kecamatan_id,
+            // 'desa_id'       => $request->desa_id,
         ]);
+
+        // $kota_asal_id = 430;
+        // $kota_tujuan_id =  $request->provinsi_id;
+        // $berat = 1700; // dalam gram
+        // $kurir = "jne";
+        // $biaya_jne = Cost::getcost($kota_asal_id, $kota_tujuan_id, $berat, $kurir);
+
+        // $kota_asal_id = 430;
+        // $kota_tujuan_id =  $request->provinsi_id;
+        // $berat = 1700; // dalam gram
+        // $kurir = "tiki";
+        // $biaya_tiki = Cost::getcost($kota_asal_id, $kota_tujuan_id, $berat, $kurir);
+
+        // $kota_asal_id = 430;
+        // $kota_tujuan_id =  $request->provinsi_id;
+        // $berat = 1700; // dalam gram
+        // $kurir = "pos";
+        // $biaya_pos = Cost::getcost($kota_asal_id, $kota_tujuan_id, $berat, $kurir);
+        
+        // $merge = array_merge($biaya_jne,$biaya_tiki,$biaya_pos);
+        
+        // $cek_tarif =  $this->tarifbiaya::where('user_id', $request->user_id)->count();
+
+        // if($cek_tarif > 0){
+        //   $this->tarifbiaya::where('user_id', $request->user_id)->delete();
+        // }
+
+        // foreach($merge as $val){
+          
+        //   $this->tarifbiaya::create([
+        //       'user_id' => $request->user_id,
+        //       'code' => $val['code'],
+        //       'costs' => $val['costs'],
+              
+        //     ]);
+        // }
+        
+
 
     }
 
     public function storeCart($request){
+        $harga =  ($request->quantity * $request->harga);
 
         $cart = $this->cart::create([
             'kode'       => $request->kode,
             'jenis'      => $request->jenis,
-            'harga'      => $request->harga,
+            'harga'      => $harga,
             'user_id'    => $request->user_id,
+            'berat'      => $request->berat,
+            'qty'        => $request->quantity,
         ]);
+
+      
 
     }
 
     public function checkoutLive($request)
     {
+        $harga =  ($request->quantity * $request->harga);
         $cart = $this->cart::create([
             'kode'       => $request->kode,
             'jenis'      => $request->jenis,
             'harga'      => $request->harga,
             'user_id'    => $request->user_id,
             'status'     => 1,
+            'berat'      => $request->berat,
+            'qty'        => $request->quantity,
         ]);
         
 
@@ -115,7 +166,7 @@ class CheckoutService
         $list_invoice =  $this->invoice::with('cart')
         ->where('no_invoice',$invoice->no_invoice)->first();
 
-        Mail::to(Auth::user()->email)->send(new CheckoutLiveEmail($list_invoice));
+        // Mail::to(Auth::user()->email)->send(new CheckoutLiveEmail($list_invoice));
 
 
     }
