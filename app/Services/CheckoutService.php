@@ -99,20 +99,26 @@ class CheckoutService
         //     ]);
         // }
         
+    }
 
-
+    public function storeKurir($request)
+    {
+      $kurir = $request->kurir;
+      
+      $this->invoice::where('id',$request->id_invoice);
     }
 
     public function storeCart($request){
-        $harga =  ($request->quantity * $request->harga);
+        $total =  ($request->quantity * $request->harga);
 
         $cart = $this->cart::create([
             'kode'       => $request->kode,
             'jenis'      => $request->jenis,
-            'harga'      => $harga,
+            'harga'      => $request->harga,
             'user_id'    => $request->user_id,
             'berat'      => $request->berat,
             'qty'        => $request->quantity,
+            'total'      => $total,
         ]);
 
       
@@ -121,7 +127,8 @@ class CheckoutService
 
     public function checkoutLive($request)
     {
-        $harga =  ($request->quantity * $request->harga);
+        $total =  ($request->quantity * $request->harga);
+
         $cart = $this->cart::create([
             'kode'       => $request->kode,
             'jenis'      => $request->jenis,
@@ -130,6 +137,8 @@ class CheckoutService
             'status'     => 1,
             'berat'      => $request->berat,
             'qty'        => $request->quantity,
+            'total'      => $total,
+
         ]);
         
 
@@ -221,6 +230,7 @@ class CheckoutService
         }
 
     public function submit($request){
+      
 
         \DB::transaction(function() use($request){
 
@@ -232,12 +242,13 @@ class CheckoutService
                 'customer_details' => [
                     'first_name'    => Auth::user()['name'],
                     'email'         => Auth::user()['email'],
-                    // 'phone'         => '08888888888',
+                    'phone'         => Auth::user()['Alamat']['no_telp'],
+                    'address'       => Auth::user()['Alamat']['alamat'],
                 ],
                 'item_details' => [
                     [
-                        'id'       => 5,
-                        'price'    => $request->jumlah,
+                        'id'       => $request->idinvoice,
+                        'price'    => (float)$request->jumlah,
                         'quantity' => 1,
                         'name'     => 'Order Domba',
 

@@ -56,6 +56,7 @@
                                 @if($data['alamat'] != null)
                                     {{ $data['alamat']['alamat'] }}
                                     <?php echo ucwords(strtolower($data['alamat']->Province->name)) ?> ,
+                                    <?php echo ucwords(strtolower($data['alamat']->City->type)) ?>
                                     <?php echo ucwords(strtolower($data['alamat']->City->name)) ?>
 
                                 @endif
@@ -65,6 +66,8 @@
                         </div>
                     </div>
                 </div>
+
+                @if($data['alamat'] != null)
 
                 <div class="col-lg-4">
                     <div class="card checkout-box">
@@ -93,6 +96,7 @@
                                     </div>
                                 </div>
                             </div>
+                            
 
 
 
@@ -100,6 +104,8 @@
                         </div>
                     </div>
                 </div>
+
+                @endif
             </div>
 
 
@@ -144,6 +150,7 @@
                                             @if($data['alamat'] != null)
                                                 {{ $data['alamat']['alamat'] }}
                                                 <?php echo ucwords(strtolower($data['alamat']->Province->name)) ?> ,
+                                                <?php echo ucwords(strtolower($data['alamat']->City->type)) ?>
                                                 <?php echo ucwords(strtolower($data['alamat']->City->name)) ?>
                                             @else
                                             -
@@ -158,9 +165,11 @@
                                             <table class="table table-hover">
                                                 <thead class="thead-dark">
                                                     <tr>
-                                                        <th scope="col">Kode Domba</th>
-                                                        <th scope="col">Jenis Domba</th>
-                                                        <th scope="col">Harga Domba</th>
+                                                        <th scope="col">Kode</th>
+                                                        <th scope="col">Jenis</th>
+                                                        <th scope="col">Jumlah</th>
+                                                        <th scope="col">Harga</th>
+                                                        <th scope="col">Total</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -181,28 +190,45 @@
 
                                                 @php
                                                     $id     = $cart->id;
-                                                    $total += $cart->harga;
+                                                    $total += $cart->total;
                                             
                                                 @endphp
                                                 <tr>
                                                     <td>{{ $cart->kode }}</td>
                                                     <td>{{ $cart->jenis }}</td>
+                                                    <td>{{ $cart->qty }}</td>
                                                     <td>Rp. {{ number_format(($cart->harga), 0, ',', '.') }} </td>
+                                                    <td>Rp. {{ number_format(($cart->total), 0, ',', '.') }} </td>
                                                 </tr>
                                                 @endforeach
                                                 </tbody>
                                                 <tfoot>
                                                 <tr>
                                                     <td></td>
-                                                    <td>Ongkos kirim & Penanganan</td>
-                                                    <td id="ongkirs"> 
+                                                    <td></td>
+                                                    <td>Sub Total</td>
+                                                    <td></td>
+                                                    <td>
+                                                        Rp. {{ number_format(($total), 0, ',', '.') }} 
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td></td>
+                                                    <td></td>
+                                                    <td>Ongkos kirim & Penanganan</td>
+                                                    <td></td>
+                                                    <td id="ongkirs"> 
+                                                        Rp. 0
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
                                                     <td>Total</td>
-                                                    <td id="total">Rp. {{ number_format(($total), 0, ',', '.') }} </td>
-                                                    <input type="hidden" id="total" value="{{ $total }}">
+                                                    <td></td>
+                                                    <td id="totalakhir">
+                                                        Rp. {{ number_format(($total), 0, ',', '.') }} 
+                                                    </td>
                                                 </tr>
                                                 </tfoot>
                                             </table>
@@ -210,6 +236,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            
 
 
                         <div class="card-footer" style="border: none;">
@@ -312,7 +340,35 @@
 
 <script>
 
+        var endtotal = 0;
+        var ongkos = 0;
+
         $(document).ready(function(){
+
+            $(document).on('change', '#paket1', function() {
+                
+                $('html, body').animate({
+                    scrollTop: $(".invoice-box").offset().top
+                }, 2000);
+
+                var cid = $(this).val();
+                
+                var ongkir = 'Rp. '+ parseFloat(cid).toLocaleString(window.document.documentElement.lang);
+                $('#ongkirs').text(ongkir);
+
+                
+                var total = '{{$total}}';
+                
+                var sum = parseInt(cid) + parseInt(total);
+                
+                var totalakhir =  'Rp. '+ parseFloat(sum).toLocaleString(window.document.documentElement.lang);
+                
+                endtotal = sum;
+                ongkos = cid;
+
+                $('#totalakhir').text(totalakhir);
+
+            });
 
             $('#id_provinsi').select2({
                 dropdownParent: $('#modalubah'),
@@ -336,6 +392,7 @@
 
             
             $('#kurir').change(function (e) {
+            
             e.preventDefault();
             
 
@@ -364,7 +421,8 @@
                         $('#checkongkir').empty();
                         $('.checkongkir').addClass('d-block');
                         $.each(response[0]['costs'], function (key, value) {
-                            $('#checkongkir').append('<li class="list-group-item"><input type="checkbox" name="paket1" id="paket1" value="1" class="mr-3">'+response[0].code.toUpperCase()+' : <strong>'+value.service+'</strong> - Rp. '+value.cost[0].value+' ('+value.cost[0].etd+' hari)</li>')
+                            
+                            $('#checkongkir').append('<li class="list-group-item"><input type="checkbox" name="paket1" id="paket1" value="'+value.cost[0].value+'" class="mr-3">'+response[0].code.toUpperCase()+' : <strong>'+value.service+'</strong> - Rp. '+parseFloat(value.cost[0].value).toLocaleString(window.document.documentElement.lang)+' ('+value.cost[0].etd+' hari)</li>')
                         });
 
                     }
@@ -375,53 +433,30 @@
 
         });
 
-        $('#paket1').on('change', function() { 
-            console.log('tesss');
-            // From the other examples
-            if (!this.checked) {
-                var sure = confirm("Are you sure?");
-                this.checked = !sure;
-            }
-        });
-
-        $('#ongkir').change(function(){
-                alert('tes');
-
-                var cid = $(this).val();
-                
-                var ongkir = parseFloat(cid).toLocaleString(window.document.documentElement.lang);
-                $('#ongkirs').text(ongkir);
-
-                var total = '{{$total}}';
-                
-                var sum = parseInt(cid) + parseInt(total);
-                
-                var totalakhir = parseFloat(sum).toLocaleString(window.document.documentElement.lang);
-
-                $('#total').text(totalakhir);
-                
-                if(cid){
-                    $.ajax({
-                        
-                        success:function(res){
-                        if(res)
-                        {
-            
-                        }
-                    }
-                });
-                }
-            });
+        
 
 
 
         $('#konfirm').click(function(){
+            if(ongkos == 0){
+                swal("Gagal!", "Pilih Jasa Pengiriman !", "error");
+            }else{
+                $('#konfirmasiform').submit();
+            }
 
-            $('#konfirmasiform').submit();
+
         });
 
         $('#alert-alamat').click(function(){
-            swal("Gagal!", "Lengkapi Data Alamat Anda !", "error");
+            
+           var alamat = '{{ $data['alamat'] }}';
+          
+           if(alamat.length == 0){
+             swal("Gagal!", "Lengkapi Data Alamat Anda !", "error");
+           }else{
+            swal("Gagal!", "Pilih Jasa Pengiriman !", "error");
+           }
+            
         });
     });
 
@@ -442,8 +477,8 @@
             idkeranjang  : keranjang,
             idinvoice    : $('#idinvoice').val(),
             kodeinvoice  : $('#kodeinvoice').val(),
-            jumlah       : $('#total').val(),
-
+            jumlah       : endtotal,
+        
         },
 
         function (data, status) {
@@ -468,7 +503,8 @@
 
 
 
-    $('#id_provinsi').change(function(){
+  
+    $('select[name="provinsi_id"]').on('change', function () {
 
     var cid = $(this).val();
     if(cid){
@@ -481,14 +517,15 @@
                 $("#kota").empty();
                 $("#kota").append('<option>Pilih Kota</option>');
                 $.each(res,function(key,value){
-                    $("#kota").append('<option value="'+key+'">'+value+'</option>');
+                    $("#kota").append('<option value="'+value.id+'">'+value.type+' '+value.name+'</option>');
                 });
                 $('#kota').selectpicker('refresh');
-
+                }
             }
-        }
-    });
-}
+        });
+    }else {
+        $('select[name="provinsi_id"]').append('<option value="">-- pilih kota tujuan --</option>');
+    }
 });
 
 //     $('#kota').change(function(){
@@ -562,7 +599,7 @@
                     $("#kota").empty();
                     $("#kota").append('<option>Pilih Kota</option>');
                     $.each(res,function(key,value){
-                        $("#kota").append('<option value="'+key+'">'+value+'</option>');
+                        $("#kota").append('<option value="'+value.id+'">'+value.type+' '+value.name+'</option>');
                     });
                     $('#kota').selectpicker('val', kota);
                     $('#kota').selectpicker('refresh');

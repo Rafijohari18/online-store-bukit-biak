@@ -204,8 +204,7 @@ class IndexController extends Controller
 
     public function getKota($id)
     {
-        $states = City::where('province_id', $id)->pluck('name', 'city_id');
-        
+        $states = City::where('province_id', $id)->get();
         return response()->json($states);
     }
 
@@ -274,6 +273,27 @@ class IndexController extends Controller
                'data'    => $data,
        ]);
     }
+
+    public function updateQty(Request $request)
+    {
+        $cart =  Cart::find($request->id);
+        $cart->update([
+            'qty'   => $request->qty,
+            'total' => $cart->harga * $request->qty,
+        ]);
+
+        $success = true;
+        $message = "Qty Berhasil di Update";
+       
+       return Response::json(
+           [
+               'success' => $success,
+               'message' => $message,
+               'data'    => $cart,
+       ]);
+    }
+
+    
 
 
 }

@@ -44,6 +44,7 @@ Route::get('checkout/getDesa/{id}', 'App\Http\Controllers\Frontend\IndexControll
 // checkout 
 Route::post('cek/ongkir', 'App\Http\Controllers\Frontend\CheckoutController@check_ongkir');
 Route::post('/alamat/store', 'App\Http\Controllers\Frontend\CheckoutController@storeAlamat')->name('alamat.store');
+Route::post('/kurir/store', 'App\Http\Controllers\Frontend\CheckoutController@storeKurir')->name('kurir.store');
 Route::post('/checkout/store', 'App\Http\Controllers\Frontend\CheckoutController@store')->name('checkout.store');
 Route::post('/cart/store', 'App\Http\Controllers\Frontend\CheckoutController@storeCart')->name('cart.store');
 Route::post('/checkout', 'App\Http\Controllers\Frontend\CheckoutController@checkout')->name('checkout');
@@ -56,6 +57,7 @@ Route::get('cart/count', 'App\Http\Controllers\Frontend\IndexController@countCar
 Route::get('cart/user/count', 'App\Http\Controllers\Frontend\IndexController@countuserCart')->name('cart.user.count');
 
 
+Route::post('cart/updateQty', 'App\Http\Controllers\Frontend\IndexController@updateQty')->name('cart.updateQty');
 Route::get('check/delete', 'App\Http\Controllers\Frontend\IndexController@delete')->name('cart.delete');
 Route::get('check/deleteAll', 'App\Http\Controllers\Frontend\IndexController@deleteAll')->name('cart.deleteAll');
 

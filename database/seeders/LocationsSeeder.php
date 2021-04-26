@@ -28,6 +28,7 @@ class LocationsSeeder extends Seeder
                     'province_id'   => $provinceRow['province_id'],
                     'city_id'       => $cityRow['city_id'],
                     'name'          => $cityRow['city_name'],
+                    'type'          => $cityRow['type'],
                 ]);
             }
         }

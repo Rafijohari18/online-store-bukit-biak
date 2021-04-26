@@ -71,6 +71,20 @@ class CheckoutController extends Controller
         ]);
     }
 
+    public function storeKurir(Requets $request)
+    {
+        $data = $this->checkout->storeKurir($request);
+        $success = true;
+        $message = "Kurir Berhasil di Simpan";
+
+        return Response::json(
+            [
+                'success' => $success,
+                'message' => $message,
+                'data'    => $data,
+        ]);
+    }
+
     public function checkout(Request $request)
     {
 
