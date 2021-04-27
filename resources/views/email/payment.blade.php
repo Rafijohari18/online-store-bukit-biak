@@ -119,10 +119,11 @@ body{
                 <tr>
                     <td>Alamat Penerima</td>
                     <td>
-                            <?php echo ucwords(strtolower($invoice->User->Alamat->Provinsi->name)) ?> ,
-                            <?php echo ucwords(strtolower($invoice->User->Alamat->Kota->kota)) ?> ,
-                            <?php echo ucwords(strtolower($invoice->User->Alamat->Kecamatan->kecamatan)) ?> ,
-                            <?php echo ucwords(strtolower($invoice->User->Alamat->Desa->desa)) ?>                </tr>
+                            <?php echo ucwords(strtolower($invoice->User->Alamat->alamat)) ?> ,
+                            <?php echo ucwords(strtolower($invoice->User->Alamat->Province->name)) ?> ,
+                            <?php echo ucwords(strtolower($invoice->User->Alamat->City->type)) ?> ,
+                            <?php echo ucwords(strtolower($invoice->User->Alamat->City->name)) ?> ,
+                 </tr>
                 <tr>
                     <td>Telepon</td>
                     <td>{{ $invoice->User->Alamat->no_telp }}</td>
@@ -139,9 +140,11 @@ body{
             <table border="0" style="width: 750px; border-collapse: collapse;">
                <thead style="background-color: black;color:white;">
                     <th style="border:1px solid black;">No</th>
-                    <th style="border:1px solid black;">Kode Kambing</th>
-                    <th style="border:1px solid black;">Jenis Domba</th>
-                    <th style="border:1px solid black;">Harga Domba</th>
+                    <th style="border:1px solid black;">Kode </th>
+                     <th style="border:1px solid black;">Jenis </th>
+                    <th style="border:1px solid black;">Jumlah </th>
+                    <th style="border:1px solid black;">Harga</th>
+                    <th style="border:1px solid black;">Total</th>
                 </thead>
                 <tbody>
                         @php
@@ -151,20 +154,22 @@ body{
 
                         @foreach($invoice->cart as $cart)
                         @php
-                            $total += $cart->harga;
+                            $total += $cart->total;
                         @endphp
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $cart->kode }}</td>
                             <td>{{ $cart->jenis }}</td>
+                            <td>{{ $cart->qty }}</td>
                             <td>Rp. {{ number_format(($cart->harga), 0, ',', '.') }}</td>
+                            <td>Rp. {{ number_format(($cart->total), 0, ',', '.') }}</td>
                           
                         </tr>
                         @endforeach
                     
                       <tr>
                         <td></td>
-                        <td>Total Pembayaran </td>
+                        <td>Sub Total </td>
                         <td></td>
                         <td >Rp. {{ number_format(($total), 0, ',', '.') }}</td>
                     </tr>
