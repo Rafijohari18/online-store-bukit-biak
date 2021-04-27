@@ -49,7 +49,6 @@ return [
         'account_type'  => 'starter', //starter,basic,pro          
     ],
 
-
    
 
 ];
